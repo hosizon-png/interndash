@@ -559,10 +559,7 @@
 // ║  任务 4：用原生 fetch() 替换 localStorage                     ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const API_BASE = localStorage.getItem('INTERNDASH_API_BASE')
-  || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'https://intern-api-16ja.onrender.com'
-    : `${window.location.origin.replace(/\/$/, '')}/api`);
+const API_BASE = 'https://intern-api-16ja.onrender.com/api';
 
 // ── 工具：Toast 提示 ─────────────────────────────────────────
 function showToast(msg, duration = 2500) {
