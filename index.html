@@ -5,23 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>PlayJob — 发现你的职业机遇</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #000000;
       --surface: rgba(28, 28, 30, 0.7);
       --surface-solid: #1c1c1e;
-      --border: rgba(255, 255, 255, 0.1);
+      --border: rgba(255, 255, 255, 0.15);
       --accent: #2997ff;
       --text: #f5f5f7;
       --muted: #86868b;
+      --danger: #ff453a;
       --radius: 20px;
       --apple-bezier: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
       background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden;
     }
 
@@ -32,74 +33,99 @@
       background: rgba(0, 0, 0, 0.8); backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border);
     }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; cursor: pointer; }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; cursor: pointer; letter-spacing: -0.5px; }
     .logo span { color: var(--accent); }
     nav { display: flex; gap: 24px; }
-    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: 0.3s; padding: 8px 4px; position: relative; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: 0.3s; padding: 8px 4px; position: relative; }
+    nav a:hover { color: var(--text); }
     nav a.active { color: var(--text); }
     nav a.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--accent); border-radius: 2px; }
 
-    main { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+    main { max-width: 1200px; margin: 0 auto; padding: 40px 20px 80px; }
     .section { display: none; }
     .section.active { display: block; animation: slideUp 0.6s var(--apple-bezier); }
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ── Search Bar ── */
-    .search-wrapper { display: flex; gap: 12px; margin-bottom: 40px; }
-    .search-wrapper input { flex: 1; padding: 16px; background: var(--surface-solid); border: 1px solid var(--border); border-radius: 14px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
-    .search-wrapper input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.1); }
+    /* ── Search Bar (重构：更大更清晰) ── */
+    .search-wrapper { 
+      display: flex; gap: 15px; margin-bottom: 50px; 
+      background: var(--surface-solid); padding: 12px; border-radius: 24px;
+      border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .search-wrapper input { 
+      flex: 1; padding: 16px 20px; background: transparent; border: none; 
+      color: #fff; font-size: 1.15rem; outline: none; transition: 0.3s;
+    }
+    .search-wrapper input::placeholder { color: #666; }
+    .search-wrapper .btn-primary {
+      padding: 0 35px; font-size: 1.05rem; border-radius: 16px;
+    }
 
     /* ── Job Cards ── */
     #jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
     .job-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 28px; transition: 0.4s var(--apple-bezier); backdrop-filter: blur(20px);
+      padding: 30px; transition: 0.4s var(--apple-bezier); backdrop-filter: blur(20px);
       display: flex; flex-direction: column; height: 100%;
     }
-    .job-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.3); background: rgba(45, 45, 48, 0.8); }
-    .job-card .company { color: var(--accent); font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 8px; }
-    .job-card .title { font-size: 1.3rem; font-weight: 700; line-height: 1.3; margin-bottom: 16px; }
+    .job-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.4); background: rgba(45, 45, 48, 0.9); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+    .job-card .company { color: var(--accent); font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+    .job-card .title { font-size: 1.4rem; font-weight: 700; line-height: 1.3; margin-bottom: 16px; }
     .job-card .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-    .tag { padding: 4px 12px; background: rgba(255,255,255,0.06); border-radius: 8px; font-size: 0.75rem; color: var(--muted); }
+    .tag { padding: 5px 12px; background: rgba(255,255,255,0.08); border-radius: 8px; font-size: 0.8rem; color: var(--muted); font-weight: 500; }
 
     /* ── Kanban Board ── */
     .board-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
     .board-column { background: var(--surface-solid); border-radius: 24px; padding: 20px; min-height: 600px; }
-    .board-column h3 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; display: flex; justify-content: space-between; }
-    .board-column h3 span { background: rgba(255,255,255,0.1); padding: 2px 10px; border-radius: 10px; font-size: 0.8rem; }
-    .app-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+    .board-column h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .board-column h3 span { background: rgba(255,255,255,0.1); padding: 2px 10px; border-radius: 12px; font-size: 0.85rem; color: var(--accent); }
+    
+    .app-card { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 18px; padding: 18px; margin-bottom: 15px; position: relative; transition: 0.2s; }
+    .app-card:hover { background: rgba(255,255,255,0.08); }
+    /* 新增：删除按钮 */
+    .btn-delete { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--danger); font-size: 1.2rem; cursor: pointer; opacity: 0.5; transition: 0.3s; }
+    .btn-delete:hover { opacity: 1; transform: scale(1.1); }
 
     /* ── Forum ── */
     .forum-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
-    .post-box { background: var(--surface-solid); padding: 24px; border-radius: 24px; height: fit-content; }
-    .post-item { background: rgba(255,255,255,0.03); border-radius: 16px; padding: 20px; margin-bottom: 16px; transition: 0.3s; }
-    .post-item:hover { background: rgba(255,255,255,0.06); }
+    .post-box { background: var(--surface-solid); padding: 28px; border-radius: 24px; height: fit-content; }
+    .post-item { background: rgba(255,255,255,0.04); border-radius: 20px; padding: 24px; margin-bottom: 20px; border: 1px solid transparent; transition: 0.3s; }
+    .post-item:hover { background: rgba(255,255,255,0.08); border-color: var(--border); }
 
     /* ── Buttons ── */
     .btn { padding: 12px 24px; border-radius: 99px; border: none; font-weight: 600; cursor: pointer; transition: 0.3s; }
     .btn-primary { background: var(--text); color: #000; }
+    .btn-primary:active { transform: scale(0.96); }
     .btn-accent { background: var(--accent); color: #fff; }
-    .btn-secondary { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid var(--border); }
-    .btn-xs { padding: 6px 12px; font-size: 0.75rem; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+    .btn-xs { padding: 8px 14px; font-size: 0.8rem; }
 
-    /* 📱 Mobile Responsive */
+    /* 📱 Mobile Responsive (移动端深度适配) */
     @media (max-width: 768px) {
       header { padding: 16px 20px; flex-direction: column; gap: 15px; }
-      nav { gap: 12px; }
-      .search-wrapper { flex-direction: column; }
+      nav { gap: 15px; width: 100%; justify-content: center; }
+      
+      .search-wrapper { flex-direction: column; padding: 15px; border-radius: 24px; }
+      .search-wrapper input { padding: 10px; font-size: 1.1rem; }
+      .search-wrapper .btn-primary { padding: 16px; width: 100%; }
+      
       #jobs-container { grid-template-columns: 1fr; }
-      .board-container { display: flex; overflow-x: auto; padding-bottom: 20px; }
-      .board-column { min-width: 300px; }
+      
+      /* 看板横向滑动 */
+      .board-container { display: flex; overflow-x: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; }
+      .board-column { min-width: 300px; flex-shrink: 0; }
+      
       .forum-grid { grid-template-columns: 1fr; }
     }
 
-    #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 28px; border-radius: 50px; font-weight: 700; z-index: 2000; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 14px 32px; border-radius: 50px; font-size: 0.95rem; font-weight: 700; z-index: 2000; display: none; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo" onclick="showSection('jobs')">Play<span>Job</span></div>
+  <div class="logo" onclick="location.reload()">Play<span>Job</span></div>
   <nav>
     <a href="#" class="active" id="nav-jobs" onclick="showSection('jobs', this)">发现岗位</a>
     <a href="#" id="nav-board" onclick="showSection('board', this)">我的看板</a>
@@ -110,12 +136,12 @@
 <main>
   <!-- Section 1: 发现岗位 -->
   <section id="section-jobs" class="section active">
-    <div style="margin-bottom: 32px;">
-      <h2 style="font-size: 2.2rem; letter-spacing: -1px;">探索最新机会</h2>
-      <p style="color: var(--muted);">实时接入半导体、互联网、硬科技招聘索引</p>
+    <div style="margin-bottom: 35px; text-align: center;">
+      <h1 style="font-size: 2.8rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 12px;">探索全球机遇</h1>
+      <p style="color: var(--muted); font-size: 1.1rem;">已聚合半导体、互联网、金融、新能源顶级实习库</p>
     </div>
     <div class="search-wrapper">
-      <input id="q-input" type="text" placeholder="输入公司或关键词 (例如: 芯片, 字节, 前端...)" />
+      <input id="q-input" type="text" placeholder="搜公司、行业或技术栈 (例如: 芯片, 字节, 金融...)" />
       <button class="btn btn-primary" onclick="searchJobs()">即刻搜索</button>
     </div>
     <div id="jobs-container"></div>
@@ -123,19 +149,19 @@
 
   <!-- Section 2: 我的看板 -->
   <section id="section-board" class="section">
-    <h2 style="font-size: 2.2rem; margin-bottom: 32px; letter-spacing: -1px;">投递进度看板</h2>
+    <h2 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 35px; letter-spacing: -1px;">投递进度看板</h2>
     <div class="board-container" id="board-container"></div>
   </section>
 
   <!-- Section 3: 面经论坛 -->
   <section id="section-forum" class="section">
-    <h2 style="font-size: 2.2rem; margin-bottom: 32px; letter-spacing: -1px;">面经交流社区</h2>
+    <h2 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 35px; letter-spacing: -1px;">面经交流社区</h2>
     <div class="forum-grid">
       <div class="post-box">
-        <h3 style="margin-bottom: 16px;">发布讨论</h3>
-        <input id="post-title" placeholder="标题..." style="width:100%; margin-bottom:12px;" />
-        <textarea id="post-content" placeholder="分享你的面试经验..." style="width:100%; height:150px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; color:#fff; padding:12px; outline:none; margin-bottom:16px;"></textarea>
-        <button class="btn btn-accent" style="width:100%;" onclick="createPost()">立即发布</button>
+        <h3 style="margin-bottom: 20px; font-size: 1.2rem;">分享你的经验</h3>
+        <input id="post-title" placeholder="标题: 某厂三面面经..." style="width:100%; margin-bottom:15px; padding: 14px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; color:#fff; outline:none;" />
+        <textarea id="post-content" placeholder="分享你的面试细节和真题..." style="width:100%; height:180px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; color:#fff; padding:14px; outline:none; margin-bottom:20px; resize: none;"></textarea>
+        <button class="btn btn-accent" style="width:100%; padding: 16px;" onclick="createPost()">立即发布</button>
       </div>
       <div id="posts-list"></div>
     </div>
@@ -164,27 +190,40 @@ function showSection(name, el) {
 
 /* ── 发现岗位逻辑 ── */
 async function searchJobs() {
-  const q = document.getElementById('q-input').value;
+  const q = document.getElementById('q-input').value.trim();
   const container = document.getElementById('jobs-container');
-  container.innerHTML = '<p style="color:var(--muted)">正在同步全网数据...</p>';
+  
+  container.innerHTML = `
+    <div style="grid-column:1/-1; text-align:center; padding:60px 0;">
+      <div style="font-size:3rem; margin-bottom:20px; animation: pulse 1.5s infinite;">🪐</div>
+      <p style="color:var(--accent); font-weight:700; font-size:1.2rem;">正在连接全行业数据库...</p>
+    </div>
+  `;
+
   try {
     const res = await fetch(`${API_BASE}/live-search?q=${encodeURIComponent(q)}`);
     const { data } = await res.json();
+    
+    if(!data || data.length === 0) {
+      container.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:40px;">未找到匹配结果，请尝试搜索"金融"、"半导体"或"外企"等行业词。</div>';
+      return;
+    }
+
     container.innerHTML = data.map(job => `
       <div class="job-card">
         <div class="company">${job.company}</div>
         <div class="title">${job.title}</div>
         <div class="tags">
-          <span class="tag">📍 ${job.location || '不限'}</span>
+          <span class="tag">📍 ${job.location || '全国/远程'}</span>
           ${(job.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}
         </div>
         <div style="display:flex; gap:12px; margin-top:auto;">
-          <button class="btn btn-accent btn-xs" style="flex:1" onclick="window.open('${job.sourceUrl}','_blank')">申请链接</button>
-          <button class="btn btn-secondary btn-xs" onclick="addToBoard('${job.company}', '${job.title}', '${job.location}', '${job.sourceUrl}')">加入看板</button>
+          <button class="btn btn-accent btn-xs" style="flex:1; padding: 12px 0;" onclick="window.open('${job.sourceUrl}','_blank')">直达申请</button>
+          <button class="btn btn-secondary btn-xs" style="padding: 12px 20px;" onclick="addToBoard('${job.company}', '${job.title}', '${job.location}', '${job.sourceUrl}')">加入看板</button>
         </div>
       </div>
     `).join('');
-  } catch (err) { container.innerHTML = '服务暂不可用'; }
+  } catch (err) { container.innerHTML = '<div style="color:var(--danger); grid-column:1/-1; text-align:center;">服务暂不可用，请稍后再试。</div>'; }
 }
 
 async function addToBoard(company, title, location, sourceUrl) {
@@ -195,33 +234,36 @@ async function addToBoard(company, title, location, sourceUrl) {
       body: JSON.stringify({ company, title, location, sourceUrl })
     });
     if(res.ok) showToast('✅ 成功加入看板！');
-  } catch (err) { showToast('❌ 加入失败'); }
+    else showToast('❌ 加入失败');
+  } catch (err) { showToast('❌ 网络错误'); }
 }
 
-/* ── 看板逻辑 ── */
+/* ── 看板逻辑 (新增删除功能) ── */
 async function fetchBoard() {
   const container = document.getElementById('board-container');
   const STATUS_NAME = { applied: '已投递', interview: '面试中', offer: '已录取', reject: '淘汰' };
   try {
     const res = await fetch(`${API_BASE}/applications`);
     const { board } = await res.json();
+    
     container.innerHTML = Object.keys(STATUS_NAME).map(status => `
       <div class="board-column">
         <h3>${STATUS_NAME[status]} <span>${board[status]?.length || 0}</span></h3>
         ${(board[status] || []).map(item => `
           <div class="app-card">
-            <div style="font-weight:700; font-size:0.95rem;">${item.title}</div>
-            <div style="color:var(--muted); font-size:0.8rem; margin:6px 0 12px;">${item.company}</div>
-            <div style="display:flex; gap:6px;">
+            <button class="btn-delete" onclick="deleteApp('${item._id}')">×</button>
+            <div style="font-weight:700; font-size:1rem; margin-bottom:4px; padding-right:20px;">${item.title}</div>
+            <div style="color:var(--muted); font-size:0.85rem; margin-bottom:14px;">${item.company}</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
               ${Object.keys(STATUS_NAME).filter(s => s !== status).map(s => 
-                `<button class="btn btn-secondary btn-xs" style="font-size:0.6rem; padding:4px 8px;" onclick="updateStatus('${item._id}', '${s}')">${STATUS_NAME[s]}</button>`
+                `<button class="btn btn-secondary btn-xs" style="font-size:0.7rem; padding:6px 10px;" onclick="updateStatus('${item._id}', '${s}')">${STATUS_NAME[s]}</button>`
               ).join('')}
             </div>
           </div>
         `).join('')}
       </div>
     `).join('');
-  } catch (err) { container.innerHTML = '看板加载失败'; }
+  } catch (err) { container.innerHTML = '<div style="color:var(--muted)">看板加载失败</div>'; }
 }
 
 async function updateStatus(id, status) {
@@ -233,6 +275,18 @@ async function updateStatus(id, status) {
   fetchBoard();
 }
 
+// 移除投递记录
+async function deleteApp(id) {
+  if(!confirm('确定要从看板中移除这条投递记录吗？')) return;
+  try {
+    const res = await fetch(`${API_BASE}/applications/${id}`, { method: 'DELETE' });
+    if(res.ok) {
+      showToast('🗑️ 记录已移除');
+      fetchBoard();
+    }
+  } catch(err) { showToast('❌ 移除失败'); }
+}
+
 /* ── 论坛逻辑 ── */
 async function fetchPosts() {
   const container = document.getElementById('posts-list');
@@ -241,30 +295,35 @@ async function fetchPosts() {
     const { data } = await res.json();
     container.innerHTML = data.map(post => `
       <div class="post-item">
-        <div style="font-weight:700; font-size:1.1rem; margin-bottom:8px;">${post.title}</div>
-        <div style="color:var(--muted); font-size:0.9rem; line-height:1.6;">${post.content}</div>
-        <div style="margin-top:12px; font-size:0.75rem; color:var(--accent);">👍 ${post.likes || 0} 赞</div>
+        <div style="font-weight:800; font-size:1.2rem; margin-bottom:10px;">${post.title}</div>
+        <div style="color:var(--text); font-size:0.95rem; line-height:1.6; opacity:0.8;">${post.content}</div>
+        <div style="margin-top:16px; font-size:0.8rem; color:var(--accent); display:flex; align-items:center; gap:5px;">
+          <span>👍</span> ${post.likes || 0} 人觉得很赞
+        </div>
       </div>
     `).join('');
-  } catch (err) { container.innerHTML = '帖子加载失败'; }
+  } catch (err) { container.innerHTML = '<div style="color:var(--muted)">帖子加载失败</div>'; }
 }
 
 async function createPost() {
   const title = document.getElementById('post-title').value;
   const content = document.getElementById('post-content').value;
-  if(!title || !content) return showToast('请填写完整内容');
-  await fetch(`${API_BASE}/posts`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, content, author: '匿名' })
-  });
-  showToast('✅ 发布成功');
-  document.getElementById('post-title').value = '';
-  document.getElementById('post-content').value = '';
-  fetchPosts();
+  if(!title || !content) return showToast('⚠️ 请填写完整内容');
+  
+  try {
+    await fetch(`${API_BASE}/posts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, content, author: '匿名' })
+    });
+    showToast('✅ 发布成功');
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-content').value = '';
+    fetchPosts();
+  } catch(err) { showToast('❌ 发布失败'); }
 }
 
-// 默认执行
+// 初始化
 searchJobs();
 </script>
 </body>
