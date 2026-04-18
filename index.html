@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InternDash — 实习一站式平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0d0f14;
+      --surface:   #161a23;
+      --border:    #252a38;
+      --accent:    #5fffb0;
+      --accent2:   #4f8aff;
+      --text:      #e8eaf0;
+      --muted:     #7a8099;
+      --danger:    #ff5a5a;
+      --warn:      #ffc95a;
+      --radius:    12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(13,15,20,0.88);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--text); }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 0.9rem;
+      transition: color .2s;
+    }
+    nav a:hover, nav a.active { color: var(--accent); }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .section-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    /* ── Search bar ── */
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .search-bar input {
+      flex: 1;
+      min-width: 180px;
+      padding: 10px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-bar input:focus { border-color: var(--accent2); }
+    .search-bar input::placeholder { color: var(--muted); }
+    .job-filters {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      min-width: 52px;
+    }
+    .filter-chip {
+      border: 1px solid var(--border);
+      background: #121621;
+      color: var(--text);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .filter-chip.active {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+    .company-hits {
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .company-badge {
+      background: rgba(95,255,176,.12);
+      border: 1px solid rgba(95,255,176,.25);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.75rem;
+    }
+    .jobs-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .tree-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      position: sticky;
+      top: 86px;
+      max-height: calc(100vh - 110px);
+      overflow: auto;
+    }
+    .tree-title {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .tree-list, .tree-sublist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .tree-sublist { padding-left: 12px; margin-top: 6px; }
+    .tree-item { margin-bottom: 6px; }
+    .tree-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #121621;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .tree-btn.active {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+    .tree-company {
+      width: 100%;
+      text-align: left;
+      border: 1px dashed var(--border);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 6px 9px;
+      cursor: pointer;
+      font-size: 0.76rem;
+    }
+    .tree-company.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn {
+      padding: 10px 22px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary   { background: var(--accent);  color: #0d0f14; }
+    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn:hover { opacity: 0.85; }
+
+    /* ── Job Cards ── */
+    #jobs-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .job-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: border-color .2s, transform .2s;
+      cursor: pointer;
+    }
+    .job-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-2px);
+    }
+    .job-card .company {
+      font-size: 0.78rem;
+      color: var(--accent2);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .job-card .job-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .job-card .meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(79,138,255,0.12);
+      color: var(--accent2);
+      border: 1px solid rgba(79,138,255,0.25);
+    }
+    .job-card .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+    }
+    .btn-xs {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    /* ── Status pill ── */
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+    .pill-applied   { background: rgba(79,138,255,.15); color: var(--accent2); }
+    .pill-interview { background: rgba(255,201,90,.15);  color: var(--warn); }
+    .pill-offer     { background: rgba(95,255,176,.15);  color: var(--accent); }
+    .pill-reject    { background: rgba(255,90,90,.15);   color: var(--danger); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+      z-index: 999;
+    }
+    #toast.show { opacity: 1; }
+
+    /* ── Loading skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface) 25%, #1f2535 50%, var(--surface) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .skeleton-card { height: 160px; border-radius: var(--radius); }
+
+    /* ── Pagination ── */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 36px;
+    }
+    .pagination button {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: border-color .2s;
+    }
+    .pagination button.current { border-color: var(--accent); color: var(--accent); }
+    .pagination button:hover   { border-color: var(--accent2); }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+    .board-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+    .board-column {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      min-height: 240px;
+      padding: 12px;
+    }
+    .board-column h3 {
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .app-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #121621;
+    }
+    .app-card .title { font-weight: 600; margin-bottom: 6px; }
+    .app-card .meta {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+    }
+    .app-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .btn-tiny {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 0.72rem;
+    }
+    .btn-tiny:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    .forum-layout {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1.1fr 1.9fr;
+    }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .panel h3 {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .form-row { margin-bottom: 10px; }
+    .form-row input, .form-row textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #121621;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.88rem;
+      outline: none;
+    }
+    .form-row textarea { min-height: 120px; resize: vertical; }
+    .form-row input:focus, .form-row textarea:focus { border-color: var(--accent2); }
+
+    #posts-container { display: grid; gap: 10px; }
+    .post-item {
+      background: #121621;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .post-item .title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+    .post-item .meta {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+    @media (max-width: 900px) {
+      .forum-layout { grid-template-columns: 1fr; }
+      .jobs-layout { grid-template-columns: 1fr; }
+      .tree-panel {
+        position: static;
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Intern<span>Dash</span></div>
+  <nav>
+    <a href="#" class="active" onclick="showSection('jobs', this); return false;">岗位</a>
+    <a href="#" onclick="showSection('board', this); return false;">看板</a>
+    <a href="#" onclick="showSection('forum', this); return false;">论坛</a>
+  </nav>
+</header>
+
+<main>
+  <section id="section-jobs" class="section active">
+    <div class="section-header">
+      <h2>最新实习岗位</h2>
+      <span id="total-count" style="color:var(--muted);font-size:.88rem;"></span>
+    </div>
+
+    <!-- ▼ 任务 4：用 fetch 替代 localStorage 的搜索区 -->
+    <div class="search-bar">
+      <input id="search-company" type="text" placeholder="公司名…" />
+      <input id="search-title"   type="text" placeholder="职位名…" />
+      <button class="btn btn-primary" onclick="fetchJobs(1)">搜索</button>
+      <button class="btn btn-secondary" onclick="clearSearch()">重置</button>
+    </div>
+
+    <div class="job-filters">
+      <div class="filter-group">
+        <span class="filter-label">按专业</span>
+        <div id="major-filter-chips"></div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">按岗位</span>
+        <div id="role-filter-chips"></div>
+      </div>
+    </div>
+    <div class="jobs-layout">
+      <aside class="tree-panel">
+        <div class="tree-title">树状导航（专业 -> 岗位 -> 公司）</div>
+        <div id="jobs-tree"></div>
+      </aside>
+      <div>
+        <div class="company-hits" id="company-hits"></div>
+        <div id="jobs-container"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="section-board" class="section">
+    <div class="section-header">
+      <h2>投递看板</h2>
+      <button class="btn btn-secondary" onclick="fetchBoard()">刷新看板</button>
+    </div>
+    <div class="board-grid" id="board-container"></div>
+  </section>
+
+  <section id="section-forum" class="section">
+    <div class="section-header">
+      <h2>经验论坛</h2>
+      <div style="display:flex; gap:8px;">
+        <input id="forum-tag-filter" placeholder="按标签筛选（如 秋招）" />
+        <button class="btn btn-secondary" onclick="fetchPosts(1)">筛选</button>
+      </div>
+    </div>
+    <div class="forum-layout">
+      <div class="panel">
+        <h3>发布帖子</h3>
+        <div class="form-row"><input id="post-author" placeholder="你的昵称（默认：匿名）" /></div>
+        <div class="form-row"><input id="post-title" placeholder="标题（必填）" /></div>
+        <div class="form-row"><textarea id="post-content" placeholder="内容（必填）"></textarea></div>
+        <div class="form-row"><input id="post-tags" placeholder="标签（逗号分隔，如 面试,前端）" /></div>
+        <button class="btn btn-primary" onclick="createPost()">发布</button>
+      </div>
+      <div class="panel">
+        <h3>最新帖子</h3>
+        <div id="posts-container"></div>
+        <div class="pagination" id="posts-pagination"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  InternDash 前端 — Fetch API 对接示例                        ║
+// ║  任务 4：用原生 fetch() 替换 localStorage                     ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+const API_BASE = localStorage.getItem('INTERNDASH_API_BASE')
+  || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000/api'
+    : `${window.location.origin.replace(/\/$/, '')}/api`);
+
+// ── 工具：Toast 提示 ─────────────────────────────────────────
+function showToast(msg, duration = 2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), duration);
+}
+
+// ── 工具：通用 API 请求封装 ───────────────────────────────────
+async function apiFetch(path, options = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    headers: { 'Content-Type': 'application/json', ...options.headers },
+    ...options,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+// ─────────────────────────────────────────────────────────────
+// 任务 4 核心示例：
+//
+//  旧写法（localStorage）：
+//    const jobs = JSON.parse(localStorage.getItem('jobs') || '[]');
+//    renderJobs(jobs);
+//
+//  新写法（fetch API）：
+//    const data = await apiFetch('/jobs?company=xxx&title=yyy&page=1');
+//    renderJobs(data.data);
+// ─────────────────────────────────────────────────────────────
+
+const APP_STATUS_ORDER = ['applied', 'interview', 'offer', 'reject'];
+const STATUS_TEXT = {
+  applied: '已投递',
+  interview: '面试中',
+  offer: '已 Offer',
+  reject: '已淘汰',
+};
+let currentPage = 1;
+let currentPostPage = 1;
+let boardAutoTimer = null;
+let forumAutoTimer = null;
+const JOBS_PAGE_SIZE = 12;
+let allJobs = [];
+let selectedMajor = '全部专业';
+let selectedRole = '全部岗位';
+let selectedCompany = '全部公司';
+
+function escapeHtml(value = '') {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+// ── 获取并渲染岗位列表 ────────────────────────────────────────
+
+async function fetchJobs(page = 1) {
+  currentPage = page;
+  const company = document.getElementById('search-company').value.trim();
+  const title   = document.getElementById('search-title').value.trim();
+
+  // 构建查询参数
+  const params = new URLSearchParams({ page: 1, limit: 300 });
+  if (company) params.set('company', company);
+  if (title)   params.set('title', title);
+
+  // 显示骨架屏
+  const container = document.getElementById('jobs-container');
+  container.innerHTML = Array(6).fill(
+    '<div class="skeleton skeleton-card"></div>'
+  ).join('');
+
+  try {
+    // ← 关键：用 fetch 替代 localStorage.getItem
+    const data = await apiFetch(`/jobs?${params}`);
+
+    allJobs = data.data || [];
+    selectedMajor = '全部专业';
+    selectedRole = '全部岗位';
+    selectedCompany = '全部公司';
+    renderCategoryFilters(allJobs);
+    renderFilteredJobs(page);
+
+  } catch (err) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="icon">⚠️</div>
+        <p>加载失败：${err.message}</p>
+        <p style="margin-top:8px;font-size:.8rem;color:var(--muted)">请确认后端服务已启动</p>
+      </div>`;
+    showToast('⚠️ 岗位加载失败');
+  }
+}
+
+function inferMajor(job) {
+  const text = `${job.title || ''} ${(job.tags || []).join(' ')}`.toLowerCase();
+  if (/(前端|react|vue|web|javascript|typescript)/.test(text)) return '计算机-前端';
+  if (/(后端|java|go|python|node|spring|服务端)/.test(text)) return '计算机-后端';
+  if (/(算法|机器学习|ai|深度学习|cv|nlp)/.test(text)) return '计算机-算法';
+  if (/(数据|数分|sql|bi|分析)/.test(text)) return '数据分析';
+  if (/(产品|pm|产品经理)/.test(text)) return '产品';
+  if (/(运营|增长|内容|社区)/.test(text)) return '运营';
+  if (/(市场|品牌|营销)/.test(text)) return '市场';
+  if (/(设计|ui|ux|视觉)/.test(text)) return '设计';
+  return '其他专业';
+}
+
+function inferRole(job) {
+  const text = `${job.title || ''} ${(job.tags || []).join(' ')}`.toLowerCase();
+  if (/(前端)/.test(text)) return '前端开发';
+  if (/(后端|服务端)/.test(text)) return '后端开发';
+  if (/(算法|ai|机器学习|nlp|cv)/.test(text)) return '算法';
+  if (/(数据分析|数分|bi|数据)/.test(text)) return '数据分析';
+  if (/(测试|qa)/.test(text)) return '测试';
+  if (/(产品)/.test(text)) return '产品经理';
+  if (/(运营)/.test(text)) return '运营';
+  if (/(设计|ui|ux)/.test(text)) return '设计';
+  return '综合岗';
+}
+
+function renderCategoryFilters(jobs) {
+  const majorCounts = new Map();
+  const roleCounts = new Map();
+  jobs.forEach((job) => {
+    const major = inferMajor(job);
+    const role = inferRole(job);
+    majorCounts.set(major, (majorCounts.get(major) || 0) + 1);
+    roleCounts.set(role, (roleCounts.get(role) || 0) + 1);
+  });
+
+  const majors = ['全部专业', ...Array.from(majorCounts.keys()).sort()];
+  const roles = ['全部岗位', ...Array.from(roleCounts.keys()).sort()];
+
+  document.getElementById('major-filter-chips').innerHTML = majors.map((major) => {
+    const count = major === '全部专业' ? jobs.length : majorCounts.get(major) || 0;
+    return `<button class="filter-chip ${major === selectedMajor ? 'active' : ''}" onclick="selectMajor('${escapeHtml(major)}')">${escapeHtml(major)} (${count})</button>`;
+  }).join('');
+
+  document.getElementById('role-filter-chips').innerHTML = roles.map((role) => {
+    const count = role === '全部岗位' ? jobs.length : roleCounts.get(role) || 0;
+    return `<button class="filter-chip ${role === selectedRole ? 'active' : ''}" onclick="selectRole('${escapeHtml(role)}')">${escapeHtml(role)} (${count})</button>`;
+  }).join('');
+
+  renderJobsTree(jobs);
+}
+
+function groupJobsTree(jobs) {
+  const tree = new Map();
+  jobs.forEach((job) => {
+    const major = inferMajor(job);
+    const role = inferRole(job);
+    const company = job.company || '未知公司';
+    if (!tree.has(major)) tree.set(major, new Map());
+    const roleMap = tree.get(major);
+    if (!roleMap.has(role)) roleMap.set(role, new Map());
+    const companyMap = roleMap.get(role);
+    if (!companyMap.has(company)) companyMap.set(company, []);
+    companyMap.get(company).push(job);
+  });
+  return tree;
+}
+
+function renderJobsTree(jobs) {
+  const root = document.getElementById('jobs-tree');
+  const tree = groupJobsTree(jobs);
+  const majors = Array.from(tree.keys()).sort();
+  root.innerHTML = `
+    <ul class="tree-list">
+      <li class="tree-item">
+        <button class="tree-btn ${selectedMajor === '全部专业' ? 'active' : ''}" onclick="selectMajor('全部专业')">全部专业 (${jobs.length})</button>
+      </li>
+      ${majors.map((major) => {
+        const roleMap = tree.get(major);
+        const roleEntries = Array.from(roleMap.entries()).sort((a, b) => b[1].size - a[1].size);
+        const majorTotal = roleEntries.reduce((sum, item) => sum + Array.from(item[1].values()).reduce((s, list) => s + list.length, 0), 0);
+        const majorOpen = selectedMajor === major || selectedMajor === '全部专业';
+        return `
+          <li class="tree-item">
+            <button class="tree-btn ${selectedMajor === major ? 'active' : ''}" onclick="selectMajor('${escapeHtml(major)}')">${escapeHtml(major)} (${majorTotal})</button>
+            ${majorOpen ? `
+              <ul class="tree-sublist">
+                ${roleEntries.map(([role, companyMap]) => {
+                  const companyEntries = Array.from(companyMap.entries()).sort((a, b) => b[1].length - a[1].length);
+                  const roleTotal = companyEntries.reduce((sum, item) => sum + item[1].length, 0);
+                  const roleOpen = selectedMajor === major && (selectedRole === role || selectedRole === '全部岗位');
+                  return `
+                    <li class="tree-item">
+                      <button class="tree-btn ${selectedMajor === major && selectedRole === role ? 'active' : ''}" onclick="selectMajorRole('${escapeHtml(major)}', '${escapeHtml(role)}')">${escapeHtml(role)} (${roleTotal})</button>
+                      ${roleOpen ? `
+                        <ul class="tree-sublist">
+                          ${companyEntries.map(([company, list]) => `
+                            <li class="tree-item">
+                              <button class="tree-company ${selectedMajor === major && selectedRole === role && selectedCompany === company ? 'active' : ''}" onclick="selectCompanyInTree('${escapeHtml(major)}', '${escapeHtml(role)}', '${escapeHtml(company)}')">${escapeHtml(company)} (${list.length})</button>
+                            </li>
+                          `).join('')}
+                        </ul>
+                      ` : ''}
+                    </li>
+                  `;
+                }).join('')}
+              </ul>
+            ` : ''}
+          </li>
+        `;
+      }).join('')}
+    </ul>
+  `;
+}
+
+function getFilteredJobs() {
+  return allJobs.filter((job) => {
+    const majorOk = selectedMajor === '全部专业' || inferMajor(job) === selectedMajor;
+    const roleOk = selectedRole === '全部岗位' || inferRole(job) === selectedRole;
+    const companyOk = selectedCompany === '全部公司' || (job.company || '未知公司') === selectedCompany;
+    return majorOk && roleOk && companyOk;
+  });
+}
+
+function renderCompanyHits(jobs) {
+  const companies = Array.from(new Set(jobs.map((job) => job.company).filter(Boolean))).sort();
+  const el = document.getElementById('company-hits');
+  if (!companies.length) {
+    el.innerHTML = '当前筛选没有匹配公司';
+    return;
+  }
+  el.innerHTML = `匹配公司（${companies.length}）：` + companies.map((name) =>
+    `<span class="company-badge">${escapeHtml(name)}</span>`
+  ).join('');
+}
+
+function renderFilteredJobs(page = 1) {
+  currentPage = page;
+  const filtered = getFilteredJobs();
+  const total = filtered.length;
+  const start = (page - 1) * JOBS_PAGE_SIZE;
+  const pageJobs = filtered.slice(start, start + JOBS_PAGE_SIZE);
+  document.getElementById('total-count').textContent = `共 ${total} 个岗位`;
+  renderCompanyHits(filtered);
+  renderJobs(pageJobs);
+  renderPagination(total, page, JOBS_PAGE_SIZE);
+}
+
+function selectMajor(major) {
+  selectedMajor = major;
+  selectedCompany = '全部公司';
+  if (major === '全部专业') {
+    selectedRole = '全部岗位';
+  }
+  renderCategoryFilters(allJobs);
+  renderFilteredJobs(1);
+}
+
+function selectRole(role) {
+  selectedRole = role;
+  selectedCompany = '全部公司';
+  renderCategoryFilters(allJobs);
+  renderFilteredJobs(1);
+}
+
+function selectMajorRole(major, role) {
+  selectedMajor = major;
+  selectedRole = role;
+  selectedCompany = '全部公司';
+  renderCategoryFilters(allJobs);
+  renderFilteredJobs(1);
+}
+
+function selectCompanyInTree(major, role, company) {
+  selectedMajor = major;
+  selectedRole = role;
+  selectedCompany = company;
+  renderCategoryFilters(allJobs);
+  renderFilteredJobs(1);
+}
+
+function renderJobs(jobs) {
+  const container = document.getElementById('jobs-container');
+  if (!jobs.length) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="icon">🔍</div>
+        <p>没有找到匹配的岗位</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = jobs.map(job => {
+    const deadline = job.deadline
+      ? `截止 ${new Date(job.deadline).toLocaleDateString('zh-CN')}`
+      : '长期招聘';
+    const tags = (job.tags || [])
+      .map(t => `<span class="tag">${t}</span>`).join('');
+
+    return `
+      <div class="job-card">
+        <div class="company">${job.company}</div>
+        <div class="job-title">${job.title}</div>
+        <div class="meta">
+          <span>📍 ${job.location}</span>
+          <span>📅 ${deadline}</span>
+        </div>
+        <div class="tag-list">${tags}</div>
+        <div class="actions">
+          <button class="btn btn-primary btn-xs"
+            onclick="event.stopPropagation(); applyJob('${job._id}')">
+            ＋ 加入看板
+          </button>
+          ${job.sourceUrl
+            ? `<a class="btn btn-secondary btn-xs"
+                 href="${job.sourceUrl}" target="_blank"
+                 onclick="event.stopPropagation()">查看详情</a>`
+            : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderPagination(total, currentPage, limit) {
+  const pages = Math.ceil(total / limit);
+  const el = document.getElementById('pagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+
+  el.innerHTML = Array.from({ length: pages }, (_, i) => i + 1)
+    .map(p => `<button class="${p === currentPage ? 'current' : ''}"
+       onclick="renderFilteredJobs(${p})">${p}</button>`)
+    .join('');
+}
+
+// ── 将岗位加入投递看板 ─────────────────────────────────────────
+async function applyJob(jobId) {
+  try {
+    // ← 关键：用 POST fetch 替代 localStorage.setItem
+    await apiFetch('/applications', {
+      method: 'POST',
+      body: JSON.stringify({ job: jobId, applicantName: '我' }),
+    });
+    showToast('✅ 已加入投递看板！');
+    if (document.getElementById('section-board').classList.contains('active')) {
+      fetchBoard();
+    }
+  } catch (err) {
+    showToast(`❌ ${err.message}`);
+  }
+}
+
+// ── 投递看板 ────────────────────────────────────────────────
+function renderBoard(board = {}) {
+  const container = document.getElementById('board-container');
+  container.innerHTML = APP_STATUS_ORDER.map((status) => {
+    const list = board[status] || [];
+    const cards = list.map((item) => {
+      const job = item.job || {};
+      const nextStatusButtons = APP_STATUS_ORDER
+        .filter((nextStatus) => nextStatus !== status)
+        .map((nextStatus) => `
+          <button class="btn-tiny" onclick="updateApplicationStatus('${item._id}', '${nextStatus}')">
+            转为${STATUS_TEXT[nextStatus]}
+          </button>
+        `)
+        .join('');
+
+      return `
+        <div class="app-card">
+          <div class="title">${escapeHtml(job.title || '未知岗位')}</div>
+          <div class="meta">${escapeHtml(job.company || '未知公司')} · ${escapeHtml(job.location || '地点待定')}</div>
+          <div class="app-actions">
+            ${job.sourceUrl
+              ? `<a class="btn-tiny" href="${escapeHtml(job.sourceUrl)}" target="_blank" rel="noopener noreferrer">查看官网</a>`
+              : ''}
+            ${nextStatusButtons}
+            <button class="btn-tiny" onclick="deleteApplication('${item._id}')">删除</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="board-column">
+        <h3>${STATUS_TEXT[status]} <span class="pill pill-${status}">${list.length}</span></h3>
+        ${cards || '<div style="color:var(--muted);font-size:.85rem;">暂无记录</div>'}
+      </div>
+    `;
+  }).join('');
+}
+
+async function fetchBoard() {
+  const container = document.getElementById('board-container');
+  container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>看板加载中...</p></div>';
+  try {
+    const data = await apiFetch('/applications');
+    renderBoard(data.board || {});
+  } catch (err) {
+    container.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>加载失败：${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+async function updateApplicationStatus(applicationId, status) {
+  try {
+    await apiFetch(`/applications/${applicationId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    });
+    showToast(`✅ 状态更新为「${STATUS_TEXT[status]}」`);
+    fetchBoard();
+  } catch (err) {
+    showToast(`❌ ${err.message}`);
+  }
+}
+
+async function deleteApplication(applicationId) {
+  try {
+    await apiFetch(`/applications/${applicationId}`, { method: 'DELETE' });
+    showToast('🗑️ 已删除投递记录');
+    fetchBoard();
+  } catch (err) {
+    showToast(`❌ ${err.message}`);
+  }
+}
+
+// ── 论坛 ───────────────────────────────────────────────────
+function renderPosts(data) {
+  const container = document.getElementById('posts-container');
+  const posts = data.data || [];
+  if (!posts.length) {
+    container.innerHTML = '<div style="color:var(--muted);">暂无帖子，来发第一条吧。</div>';
+    document.getElementById('posts-pagination').innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = posts.map((post) => `
+    <div class="post-item">
+      <div class="title">
+        <span>${escapeHtml(post.title)}</span>
+        ${post.isPinned ? '<span class="pill pill-offer">置顶</span>' : ''}
+      </div>
+      <div class="meta">
+        ${escapeHtml(post.author || '匿名')} · 👍 ${post.likes || 0} · 👀 ${post.views || 0}
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:8px;">
+        ${(post.tags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-tiny" onclick="likePost('${post._id}')">点赞</button>
+        <button class="btn-tiny" onclick="viewPost('${post._id}')">查看详情</button>
+      </div>
+    </div>
+  `).join('');
+
+  renderPostsPagination(data.total || 0, Number(data.page || 1), 15);
+}
+
+function renderPostsPagination(total, page, limit) {
+  const pages = Math.ceil(total / limit);
+  const el = document.getElementById('posts-pagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = Array.from({ length: pages }, (_, i) => i + 1)
+    .map((p) => `<button class="${p === page ? 'current' : ''}" onclick="fetchPosts(${p})">${p}</button>`)
+    .join('');
+}
+
+async function fetchPosts(page = 1) {
+  currentPostPage = page;
+  const tag = document.getElementById('forum-tag-filter').value.trim();
+  const params = new URLSearchParams({ page, limit: 15 });
+  if (tag) params.set('tag', tag);
+  const container = document.getElementById('posts-container');
+  container.innerHTML = '<div style="color:var(--muted);">帖子加载中...</div>';
+  try {
+    const data = await apiFetch(`/posts?${params}`);
+    renderPosts(data);
+  } catch (err) {
+    container.innerHTML = `<div style="color:var(--danger);">加载失败：${escapeHtml(err.message)}</div>`;
+  }
+}
+
+async function createPost() {
+  const author = document.getElementById('post-author').value.trim() || '匿名';
+  const title = document.getElementById('post-title').value.trim();
+  const content = document.getElementById('post-content').value.trim();
+  const tags = document.getElementById('post-tags').value
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean);
+
+  if (!title || !content) {
+    showToast('⚠️ 标题和内容为必填');
+    return;
+  }
+  try {
+    await apiFetch('/posts', {
+      method: 'POST',
+      body: JSON.stringify({ author, title, content, tags }),
+    });
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-content').value = '';
+    document.getElementById('post-tags').value = '';
+    showToast('✅ 发帖成功');
+    fetchPosts(1);
+  } catch (err) {
+    showToast(`❌ ${err.message}`);
+  }
+}
+
+async function likePost(postId) {
+  try {
+    await apiFetch(`/posts/${postId}/like`, { method: 'PUT' });
+    fetchPosts(currentPostPage);
+  } catch (err) {
+    showToast(`❌ ${err.message}`);
+  }
+}
+
+async function viewPost(postId) {
+  try {
+    const data = await apiFetch(`/posts/${postId}`);
+    const preview = (data.content || '').slice(0, 180);
+    showToast(`📖 ${data.title}：${preview}${preview.length >= 180 ? '...' : ''}`, 4000);
+    fetchPosts(currentPostPage);
+  } catch (err) {
+    showToast(`❌ ${err.message}`);
+  }
+}
+
+// ── 导航切换 ────────────────────────────────────────────────
+function showSection(name, triggerEl) {
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  if (triggerEl) triggerEl.classList.add('active');
+  document.querySelectorAll('.section').forEach((el) => el.classList.remove('active'));
+  const section = document.getElementById(`section-${name}`);
+  if (section) section.classList.add('active');
+
+  clearInterval(boardAutoTimer);
+  clearInterval(forumAutoTimer);
+
+  if (name === 'jobs') fetchJobs(1);
+  if (name === 'board') {
+    fetchBoard();
+    boardAutoTimer = setInterval(fetchBoard, 10000);
+  }
+  if (name === 'forum') {
+    fetchPosts(1);
+    forumAutoTimer = setInterval(() => fetchPosts(currentPostPage), 12000);
+  }
+}
+
+function clearSearch() {
+  document.getElementById('search-company').value = '';
+  document.getElementById('search-title').value   = '';
+  fetchJobs(1);
+}
+
+// ── 初始化 ────────────────────────────────────────────────────
+fetchJobs(1);
+</script>
+</body>
+</html>
