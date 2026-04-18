@@ -345,27 +345,40 @@ async function submitManualJob() {
 }
 
 /* ── 2. 我的看板 ── */
-async function applyJob(jobId) {
-  // 这里的逻辑需要确保把当前卡片的岗位信息发给后端
-  // 建议直接获取卡片数据并发送
-  const jobCard = event.target.closest('.job-card');
-  const jobData = {
-    company: jobCard.querySelector('.company').innerText,
-    title: jobCard.querySelector('.job-title').innerText,
-    location: jobCard.querySelector('.meta span').innerText.replace('📍 ', ''),
-    sourceUrl: jobCard.getAttribute('onclick').match(/'([^']+)'/)[1], // 提取 URL
-    applicantName: '我'
-  };
+// 在 index.html 的 <script> 标签中找到此函数并更新
+  async function applyJob(company, title, location, sourceUrl) {
+    // 调试用：看控制台有没有打印出正确的数据
+    console.log("正在加入看板:", { company, title, location, sourceUrl });
 
-  try {
-    await apiFetch('/applications', { 
-      method: 'POST', 
-      body: JSON.stringify(jobData) 
-    });
-    showToast('✅ 已成功加入看板！');
-  } catch (err) {
-    showToast(`❌ 加入失败：${err.message}`);
-  }
+    if (!company || !title) {
+        alert("岗位信息不完整");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/applications`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                company: company,
+                title: title,
+                location: location || "全国",
+                sourceUrl: sourceUrl || "#",
+                status: "applied"
+            })
+        });
+
+        if (response.ok) {
+            alert("✅ 成功加入投递看板！");
+            if (window.loadBoard) loadBoard(); // 刷新看板
+        } else {
+            const err = await response.json();
+            throw new Error(err.error || "保存失败");
+        }
+    } catch (err) {
+        console.error("加入看板出错:", err);
+        alert("❌ 加入失败: " + err.message);
+    }
 }
 
 const APP_STATUS = ['applied', 'interview', 'offer', 'reject'];
