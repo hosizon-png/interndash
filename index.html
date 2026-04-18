@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PlayJob — 全行业实习引擎</title>
+  <title>PlayJob — 重新定义求职社区</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #050505;
       --surface: rgba(28, 28, 30, 0.6);
       --surface-solid: #1c1c1e;
-      --border: rgba(255, 255, 255, 0.15);
+      --border: rgba(255, 255, 255, 0.12);
       --accent: #2997ff;
       --text: #f5f5f7;
       --muted: #86868b;
       --danger: #ff453a;
-      --radius: 22px;
       --apple-bezier: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -26,84 +25,153 @@
     /* ── Header ── */
     header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 5%; position: sticky; top: 0; z-index: 1000;
-      background: rgba(5, 5, 5, 0.85); backdrop-filter: saturate(180%) blur(25px);
+      padding: 16px 5%; position: sticky; top: 0; z-index: 1000;
+      background: rgba(5, 5, 5, 0.85); backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border);
     }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; cursor: pointer; }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; cursor: pointer; }
     .logo span { color: var(--accent); }
-    
     .desktop-nav { display: flex; gap: 32px; align-items: center; }
-    .desktop-nav a { color: var(--muted); text-decoration: none; font-size: 1.1rem; font-weight: 600; transition: 0.3s; }
+    .desktop-nav a { color: var(--muted); text-decoration: none; font-size: 1rem; font-weight: 600; transition: 0.3s; padding: 6px 0; position: relative; }
     .desktop-nav a.active { color: var(--text); }
-    
-    .login-btn { padding: 12px 28px; background: var(--text); color: #000; border-radius: 99px; font-weight: 700; font-size: 1rem; cursor: pointer; border: none; }
+    .desktop-nav a.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 3px; background: var(--accent); border-radius: 3px; }
+    .login-btn { padding: 10px 24px; background: var(--text); color: #000; border-radius: 99px; font-weight: 700; cursor: pointer; border: none; }
 
     /* ── Mobile Tab Bar ── */
     .mobile-tab-bar {
       display: none; position: fixed; bottom: 0; left: 0; width: 100%;
-      height: 75px; background: rgba(18, 18, 18, 0.92); backdrop-filter: blur(25px);
+      height: 70px; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(25px);
       border-top: 1px solid var(--border); z-index: 1000;
       justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom);
     }
-    .tab-item { display: flex; flex-direction: column; align-items: center; color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+    .tab-item { display: flex; flex-direction: column; align-items: center; color: var(--muted); text-decoration: none; font-size: 0.75rem; gap: 4px; font-weight: 500; }
     .tab-item.active { color: var(--accent); }
-    .tab-icon { font-size: 1.7rem; margin-bottom: 4px; }
+    .tab-icon { font-size: 1.5rem; }
 
-    main { width: 100%; max-width: 1400px; margin: 0 auto; padding: 40px 5% 120px; }
+    main { width: 100%; max-width: 1400px; margin: 0 auto; padding: 30px 5% 100px; }
     .section { display: none; width: 100%; }
     .section.active { display: block; animation: fadeIn 0.4s var(--apple-bezier); }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ── Search Bar (修复：更大、更清晰) ── */
+    /* ── Search Bar ── */
     .search-wrapper { 
-      display: flex; gap: 15px; margin-bottom: 40px; width: 100%;
-      background: var(--surface-solid); padding: 14px 18px; border-radius: 22px; border: 1px solid var(--border);
+      display: flex; gap: 12px; margin-bottom: 24px; width: 100%;
+      background: var(--surface-solid); padding: 10px 14px; border-radius: 20px; border: 1px solid var(--border);
     }
-    .search-wrapper input { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.3rem; font-weight: 500; outline: none; }
-    .btn-search { padding: 16px 32px; background: var(--text); color: #000; border-radius: 16px; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; white-space: nowrap; }
+    .search-wrapper input { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.1rem; outline: none; }
+    .btn-search { padding: 12px 24px; background: var(--text); color: #000; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; white-space: nowrap; }
 
-    /* ── Job Cards ── */
-    #jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
-    .job-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 32px; transition: 0.3s; display: flex; flex-direction: column; }
-    .job-card:hover { border-color: var(--accent); transform: translateY(-8px); }
-    .job-card .company { color: var(--accent); font-weight: 800; font-size: 1rem; margin-bottom: 12px; text-transform: uppercase; }
-    .job-card .title { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; line-height: 1.3; }
+    /* ── 瀑布流基础框架 (全域共用) ── */
+    .waterfall-container { width: 100%; column-count: 4; column-gap: 20px; }
+    .waterfall-card {
+      break-inside: avoid; display: inline-block; width: 100%;
+      background: var(--surface-solid); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden; margin-bottom: 20px; transition: 0.3s;
+    }
+    .waterfall-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
 
-    /* ── Kanban Board (修复显示不全) ── */
-    .board-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
-    .board-column { background: var(--surface-solid); border-radius: 24px; padding: 24px; min-height: 600px; }
-    .board-column h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 25px; display: flex; justify-content: space-between; }
-    .app-card { background: rgba(255,255,255,0.06); border-radius: 20px; padding: 20px; margin-bottom: 18px; border: 1px solid var(--border); position: relative; }
-    .app-card .title { font-weight: 700; font-size: 1.15rem; margin-bottom: 10px; }
+    /* ── Job Cards (瀑布流模式) ── */
+    .job-card { padding: 20px; }
+    .job-card .company { color: var(--accent); font-weight: 800; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; }
+    .job-card .title { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .job-card .tags { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+    .job-btn-group { display: flex; gap: 8px; }
+    .job-btn-group button { flex: 1; padding: 10px; border-radius: 12px; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border); }
 
-    /* ── Waterfall Forum ── */
-    .waterfall-container { width: 100%; column-count: 4; column-gap: 24px; }
-    .post-card { break-inside: avoid; display: inline-block; width: 100%; background: var(--surface-solid); border-radius: 24px; overflow: hidden; margin-bottom: 24px; transition: 0.3s; border: 1px solid var(--border); cursor: pointer; }
-    .post-cover { width: 100%; height: 200px; object-fit: cover; }
-    .post-body { padding: 20px; }
-    .post-title { font-weight: 700; font-size: 1.15rem; line-height: 1.4; margin-bottom: 10px; }
+    /* ── Post Cards (面经瀑布流) ── */
+    .post-cover { width: 100%; height: 160px; object-fit: cover; display: block; background: #2c2c2e; }
+    .post-body { padding: 14px; }
+    .post-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .post-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem; color: var(--muted); }
+    .author { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+    .author img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
 
-    /* ── FAB ── */
-    .fab { position: fixed; bottom: 100px; right: 30px; width: 65px; height: 65px; background: var(--text); color: #000; border-radius: 50%; font-size: 32px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 999; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+    /* ── Kanban Board ── */
+    .board-container { display: flex; overflow-x: auto; gap: 16px; padding-bottom: 20px; }
+    .board-column { background: var(--surface-solid); border-radius: 20px; padding: 20px; min-width: 280px; flex: 1; min-height: 500px; }
+    .board-column h3 { font-size: 1.05rem; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+    .app-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); position: relative; }
 
-    /* 📱 手机端深度适配 */
+    /* ── 📱 移动端专项适配 (真·双列瀑布流 + 省略号) ── */
     @media (max-width: 768px) {
-      header { padding: 14px 5%; }
+      header { padding: 12px 5%; }
       .desktop-nav, .login-btn { display: none; }
       .mobile-tab-bar { display: flex; }
-      .search-wrapper { border-radius: 20px; padding: 10px; }
-      .search-wrapper input { font-size: 1.1rem; }
-      .btn-search { padding: 14px 22px; font-size: 1rem; border-radius: 14px; }
-      #jobs-container { grid-template-columns: 1fr; gap: 20px; }
-      .board-container { display: flex; overflow-x: auto; padding-bottom: 20px; }
-      .board-column { min-width: 88vw; }
-      .waterfall-container { column-count: 2; column-gap: 15px; }
-      .post-cover { height: 160px; }
-      .fab { bottom: 95px; right: 20px; width: 60px; height: 60px; }
+      main { padding: 20px 4% 90px; }
+      
+      .search-wrapper { padding: 8px 12px; border-radius: 16px; }
+      .search-wrapper input { font-size: 1rem; }
+      .btn-search { padding: 10px 18px; font-size: 0.9rem; }
+
+      /* 全局双列瀑布流 */
+      .waterfall-container { column-count: 2; column-gap: 10px; }
+      .waterfall-card { margin-bottom: 10px; border-radius: 16px; }
+      
+      /* 手机端岗位卡片极致压缩 */
+      .job-card { padding: 12px; }
+      .job-card .company { font-size: 0.75rem; margin-bottom: 6px; }
+      .job-card .title { font-size: 0.95rem; margin-bottom: 10px; -webkit-line-clamp: 2; } /* 职位名限制2行 */
+      .job-card .tags { font-size: 0.75rem; margin-bottom: 10px; }
+      .job-btn-group { flex-direction: column; gap: 6px; } /* 按钮改为上下堆叠更易按 */
+      .job-btn-group button { padding: 8px; font-size: 0.8rem; border-radius: 8px; }
+
+      /* 手机端帖子卡片压缩 */
+      .post-cover { height: 130px; }
+      .post-body { padding: 10px; }
+      .post-title { font-size: 0.9rem; -webkit-line-clamp: 2; } /* 小红书标题截断 */
+      .post-footer { font-size: 0.75rem; }
+      
+      .board-column { min-width: 85vw; }
     }
 
-    #toast { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 14px 35px; border-radius: 50px; font-weight: 800; font-size: 1.1rem; z-index: 5000; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    /* ── 🚀 独立沉浸式帖子详情页 (SPA 体验) ── */
+    .post-detail-screen {
+      position: fixed; inset: 0; background: var(--bg); z-index: 2000;
+      display: none; flex-direction: column; overflow-y: auto;
+      animation: slideUpScreen 0.4s var(--apple-bezier);
+    }
+    .post-detail-screen.active { display: flex; }
+    @keyframes slideUpScreen { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    
+    .detail-nav {
+      position: sticky; top: 0; background: rgba(5,5,5,0.8); backdrop-filter: blur(20px);
+      display: flex; justify-content: space-between; align-items: center; padding: 15px 5%;
+      border-bottom: 1px solid var(--border); z-index: 10;
+    }
+    .btn-back { background: none; border: none; color: #fff; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    
+    .detail-content { max-width: 800px; margin: 0 auto; width: 100%; padding-bottom: 100px; }
+    .detail-cover { width: 100%; max-height: 400px; object-fit: cover; }
+    .detail-main { padding: 25px 5%; }
+    .detail-title { font-size: 1.6rem; font-weight: 800; line-height: 1.4; margin-bottom: 20px; }
+    .detail-author-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+    .detail-author-bar img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    .detail-text { font-size: 1.05rem; line-height: 1.8; color: #eee; margin-bottom: 40px; white-space: pre-line; }
+    
+    /* 评论区 */
+    .comments-section { border-top: 1px solid var(--border); padding-top: 25px; }
+    .comment-item { display: flex; gap: 12px; margin-bottom: 20px; }
+    .comment-item img { width: 32px; height: 32px; border-radius: 50%; }
+    .comment-body { flex: 1; }
+    .comment-name { font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    .comment-text { font-size: 0.95rem; line-height: 1.5; margin-bottom: 8px; }
+    .comment-action { font-size: 0.8rem; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .comment-action.liked { color: var(--danger); }
+
+    /* 底部互动悬浮栏 */
+    .detail-bottom-bar {
+      position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(18,18,18,0.95);
+      backdrop-filter: blur(20px); border-top: 1px solid var(--border);
+      padding: 12px 5%; padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      display: flex; align-items: center; gap: 15px; z-index: 10; justify-content: center;
+    }
+    .bottom-bar-inner { max-width: 800px; width: 100%; display: flex; align-items: center; gap: 15px; }
+    .comment-input { flex: 1; background: var(--surface-solid); border: 1px solid var(--border); border-radius: 99px; padding: 10px 16px; color: #fff; outline: none; }
+    .action-icons { display: flex; gap: 20px; font-size: 1.4rem; color: #fff; cursor: pointer; }
+    
+    #toast { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 28px; border-radius: 50px; font-weight: 700; z-index: 5000; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
   </style>
 </head>
 <body>
@@ -115,7 +183,7 @@
     <a href="#" id="dnav-board" onclick="showSection('board', this)">投递看板</a>
     <a href="#" id="dnav-forum" onclick="showSection('forum', this)">面经社区</a>
   </nav>
-  <button class="login-btn" onclick="openModal('loginModal')">登录 / 注册</button>
+  <button class="login-btn" onclick="showToast('✅ 账户登录成功')">登录 / 注册</button>
 </header>
 
 <div class="mobile-tab-bar">
@@ -128,55 +196,89 @@
   <a href="#" class="tab-item" id="tab-forum" onclick="showSection('forum', this)">
     <span class="tab-icon">💬</span>社区
   </a>
-  <a href="#" class="tab-item" onclick="openModal('loginModal')">
+  <a href="#" class="tab-item" onclick="showToast('✅ 跳转至个人中心')">
     <span class="tab-icon">👤</span>我的
   </a>
 </div>
 
 <main>
+  <!-- 职位广场 (已升级为瀑布流) -->
   <section id="section-jobs" class="section active">
     <div class="search-wrapper">
-      <input id="q-input" type="text" placeholder="搜索全球 1000+ 顶尖名企职位..." />
+      <input id="q-input" type="text" placeholder="搜索全球大厂、新兴独角兽..." />
       <button class="btn-search" onclick="searchJobs()">搜索</button>
     </div>
-    <div class="job-grid" id="job-grid"></div>
+    <div class="waterfall-container" id="job-grid"></div>
   </section>
 
+  <!-- 投递看板 -->
   <section id="section-board" class="section">
+    <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 24px;">我的投递</h2>
     <div class="board-container" id="board-container"></div>
   </section>
 
+  <!-- 面经社区 (双列瀑布流) -->
   <section id="section-forum" class="section">
+    <div class="search-wrapper">
+      <input id="f-search" type="text" placeholder="搜面经：腾讯、量化真题..." />
+      <button class="btn-search" onclick="fetchPosts()">搜经验</button>
+    </div>
     <div class="waterfall-container" id="posts-list"></div>
   </section>
 </main>
 
-<div class="fab" onclick="showToast('💡 接口准备中...')">+</div>
 <div id="toast"></div>
 
-<div class="modal-overlay" id="loginModal" onclick="if(event.target==this) closeModal('loginModal')">
-  <div class="modal-box" style="background:#1c1c1e; border:1px solid var(--border); border-radius:32px; width:90%; max-width:480px; padding:40px; color:#fff; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-      <h2 style="font-size:1.8rem; font-weight:800;">欢迎回来</h2>
-      <button onclick="closeModal('loginModal')" style="background:none; border:none; color:var(--muted); font-size:2rem; cursor:pointer;">&times;</button>
+<!-- 🚀 独立沉浸式详情页 (Standalone View) -->
+<div class="post-detail-screen" id="postDetailScreen">
+  <div class="detail-nav">
+    <button class="btn-back" onclick="closePostDetail()">← 返回</button>
+    <div style="font-weight: 600;">帖子详情</div>
+    <div style="width: 60px;"></div> <!-- 占位保持居中 -->
+  </div>
+  
+  <div class="detail-content">
+    <img id="detail-cover" class="detail-cover" src="" />
+    <div class="detail-main">
+      <div class="detail-author-bar">
+        <img id="detail-avatar" src="" />
+        <span id="detail-author" style="font-weight: 600;">Author</span>
+        <button style="margin-left:auto; padding:6px 16px; border-radius:99px; background:var(--text); color:#000; border:none; font-weight:700;">关注</button>
+      </div>
+      <h1 id="detail-title" class="detail-title">标题加载中</h1>
+      <div id="detail-desc" class="detail-text">内容加载中...</div>
+      
+      <!-- 评论区 -->
+      <div class="comments-section">
+        <h3 style="margin-bottom: 20px;">共 3 条评论</h3>
+        <div id="comments-container">
+          <!-- 评论由 JS 生成 -->
+        </div>
+      </div>
     </div>
-    <input type="text" placeholder="邮箱/手机号" style="width:100%; padding:16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:16px; color:#fff; margin-bottom:20px; outline:none;" />
-    <input type="password" placeholder="密码" style="width:100%; padding:16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:16px; color:#fff; margin-bottom:30px; outline:none;" />
-    <button onclick="showToast('✅ 登录成功')" style="width:100%; padding:18px; background:var(--text); color:#000; border-radius:18px; font-weight:800; border:none; cursor:pointer;">立即登录</button>
+  </div>
+
+  <div class="detail-bottom-bar">
+    <div class="bottom-bar-inner">
+      <input class="comment-input" placeholder="说点什么..." />
+      <div class="action-icons">
+        <span onclick="toggleIcon(this, '❤️', '🤍')">🤍</span>
+        <span onclick="toggleIcon(this, '⭐️', '☆')">☆</span>
+        <span onclick="showToast('🔗 链接已复制，去分享给好友吧！')">➦</span>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
 const API = 'https://intern-api-16ja.onrender.com/api';
+let globalPosts = []; 
 
 function showToast(m) {
   const t = document.getElementById('toast');
   t.textContent = m; t.style.display = 'block';
   setTimeout(() => t.style.display = 'none', 3000);
 }
-
-function openModal(id) { document.getElementById(id).style.display = 'block'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
 function showSection(name, el) {
   document.querySelectorAll('.desktop-nav a, .tab-item, .section').forEach(i => i.classList.remove('active'));
@@ -187,21 +289,22 @@ function showSection(name, el) {
   if(name === 'forum') fetchPosts();
 }
 
+/* ── 岗位逻辑 (瀑布流化) ── */
 async function searchJobs() {
   const q = document.getElementById('q-input').value;
   const grid = document.getElementById('job-grid');
-  grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--muted); font-size:1.4rem;">🚀 正在全球范围检索优质岗位...</div>';
+  grid.innerHTML = '<div style="width:100%; text-align:center; padding:40px; color:var(--muted);">🚀 扫描全网数据库...</div>';
   try {
     const res = await fetch(`${API}/live-search?q=${encodeURIComponent(q)}`);
     const { data } = await res.json();
     grid.innerHTML = data.map(j => `
-      <div class="job-card">
+      <div class="waterfall-card job-card">
         <div class="company">${j.company}</div>
         <div class="title">${j.title}</div>
-        <div style="font-size:1rem; color:var(--muted); margin-bottom:24px;">📍 ${j.location || '全国'}</div>
-        <div style="display:flex; gap:12px; margin-top:auto;">
-          <button class="btn-search" style="flex:1; background:var(--accent); color:#fff; padding:14px; font-size:1rem;" onclick="window.open('${j.sourceUrl}')">直达申请</button>
-          <button class="btn-search" style="flex:1; background:rgba(255,255,255,0.1); color:#fff; padding:14px; font-size:1rem; border:1px solid var(--border);" onclick="addBoard('${j.company}','${j.title}')">加入看板</button>
+        <div class="tags">📍 ${j.location || '全国'}</div>
+        <div class="job-btn-group">
+          <button class="btn-primary" onclick="window.open('${j.sourceUrl}')">直达</button>
+          <button class="btn-secondary" onclick="addBoard('${j.company}','${j.title}')">看板</button>
         </div>
       </div>
     `).join('');
@@ -213,6 +316,7 @@ async function addBoard(company, title) {
   showToast('✅ 成功加入看板');
 }
 
+/* ── 看板逻辑 ── */
 async function fetchBoard() {
   const container = document.getElementById('board-container');
   const STATUS = { applied:'投递', interview:'面试', offer:'录取', reject:'淘汰' };
@@ -221,12 +325,12 @@ async function fetchBoard() {
     const { board } = await res.json();
     container.innerHTML = Object.keys(STATUS).map(s => `
       <div class="board-column">
-        <h3>${STATUS[s]} <span>${board[s]?.length || 0}</span></h3>
+        <h3>${STATUS[s]} <span style="color:var(--accent);">${board[s]?.length || 0}</span></h3>
         ${(board[s] || []).map(item => `
           <div class="app-card">
-            <button onclick="delApp('${item._id}')" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--danger); font-size:1.4rem; cursor:pointer;">&times;</button>
-            <div class="title">${item.title}</div>
-            <div style="font-size:1rem; color:var(--muted);">${item.company}</div>
+            <button onclick="delApp('${item._id}')" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--danger); font-size:1.2rem; cursor:pointer;">&times;</button>
+            <div style="font-weight:700; margin-bottom:6px; font-size:0.95rem;">${item.title}</div>
+            <div style="font-size:0.8rem; color:var(--muted);">${item.company}</div>
           </div>
         `).join('')}
       </div>
@@ -235,25 +339,81 @@ async function fetchBoard() {
 }
 async function delApp(id) { if(confirm('确认移除？')) { await fetch(`${API}/applications/${id}`, {method:'DELETE'}); fetchBoard(); } }
 
+/* ── 面经与独立详情页逻辑 ── */
 async function fetchPosts() {
   const list = document.getElementById('posts-list');
-  const mock = [
-    { t: "拿了 NVIDIA 智驾岗 Offer，分享一些心经", img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500", a: "AI大牛", l: 2431 },
-    { t: "字节跳动后端三面总结 (附真题)", img: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=500", a: "干饭人", l: 1532 },
-    { t: "中金投行暑期实习体验：比想象中更卷", img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500", a: "FinBoy", l: 890 },
-    { t: "大模型算法岗面试究竟考什么？", img: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500", a: "NLP专家", l: 1243 }
+  globalPosts = [
+    { id: 1, title: "拿了 Citadel 和 Jane Street，谈谈量化", desc: "背靠背拿了顶薪Offer。数学底子一定要好，推荐刷光绿皮书...\n\n第二段：C++系统开发考察极其深入，多线程无锁队列是必考。", img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600", author: "Quant大神", avatar: "https://i.pravatar.cc/150?img=11", likes: 3201 },
+    { id: 2, title: "DeepSeek 算法一面面经 (手撕 Attention)", desc: "面试官气场拉满。不仅要懂原理，还得知道在CUDA层面怎么优化算子。很硬核的一场面试。", img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600", author: "AI调参侠", avatar: "https://i.pravatar.cc/150?img=33", likes: 1892 },
+    { id: 3, title: "四大咨询实习 (PTA) 真相大揭秘", desc: "大一可以刷简历，大三千万别来。每天的工作基本上就是Cold Call和无穷尽的Desktop Research...", img: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=600", author: "Consulting萌新", avatar: "https://i.pravatar.cc/150?img=5", likes: 543 },
+    { id: 4, title: "字节跳动后端开发，这些八股文必须背", desc: "Redis底层结构、MySQL锁机制、Go并发原语...我整理了一份万字长文思维导图。", img: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=600", author: "后端卷王", avatar: "https://i.pravatar.cc/150?img=44", likes: 8900 }
   ];
-  list.innerHTML = mock.map(p => `
-    <div class="post-card">
+  
+  list.innerHTML = globalPosts.map(p => `
+    <div class="waterfall-card post-card" onclick="openPostDetail(${p.id})">
       <img src="${p.img}" class="post-cover" />
       <div class="post-body">
-        <div class="post-title">${p.t}</div>
-        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.9rem; color:var(--muted);">
-          <span>👤 ${p.a}</span><span>❤️ ${p.l}</span>
+        <div class="post-title">${p.title}</div>
+        <div class="post-footer">
+          <div class="author"><img src="${p.avatar}" /> ${p.author}</div>
+          <div>🤍 ${p.likes}</div>
         </div>
       </div>
     </div>
   `).join('');
+}
+
+function openPostDetail(id) {
+  const post = globalPosts.find(p => p.id === id);
+  if(!post) return;
+  
+  document.getElementById('detail-cover').src = post.img;
+  document.getElementById('detail-avatar').src = post.avatar;
+  document.getElementById('detail-title').textContent = post.title;
+  document.getElementById('detail-author').textContent = post.author;
+  document.getElementById('detail-desc').textContent = post.desc;
+  
+  // 生成虚拟评论
+  const commentsHTML = `
+    <div class="comment-item">
+      <img src="https://i.pravatar.cc/150?img=1" />
+      <div class="comment-body">
+        <div class="comment-name">路人甲</div>
+        <div class="comment-text">太强了！接好运接Offer！</div>
+        <div class="comment-action" onclick="toggleIconText(this)">🤍 128</div>
+      </div>
+    </div>
+    <div class="comment-item">
+      <img src="https://i.pravatar.cc/150?img=2" />
+      <div class="comment-body">
+        <div class="comment-name">想去大厂的菜鸡</div>
+        <div class="comment-text">大佬能分享一下简历模板吗？救救孩子。</div>
+        <div class="comment-action" onclick="toggleIconText(this)">🤍 45</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('comments-container').innerHTML = commentsHTML;
+  
+  // 显示全屏详情页
+  document.getElementById('postDetailScreen').classList.add('active');
+  // 防止底层页面滚动
+  document.body.style.overflow = 'hidden'; 
+}
+
+function closePostDetail() {
+  document.getElementById('postDetailScreen').classList.remove('active');
+  document.body.style.overflow = ''; // 恢复滚动
+}
+
+// 互动点赞逻辑
+function toggleIcon(el, activeIcon, inactiveIcon) {
+  if(el.textContent === inactiveIcon) { el.textContent = activeIcon; showToast('操作成功'); }
+  else { el.textContent = inactiveIcon; }
+}
+function toggleIconText(el) {
+  el.classList.toggle('liked');
+  if(el.classList.contains('liked')) { el.innerHTML = el.innerHTML.replace('🤍', '❤️'); }
+  else { el.innerHTML = el.innerHTML.replace('❤️', '🤍'); }
 }
 
 searchJobs();
