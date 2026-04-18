@@ -13,7 +13,7 @@
       --surface: rgba(28, 28, 30, 0.6);
       --surface-solid: #1c1c1e;
       --border: rgba(255, 255, 255, 0.1);
-      --accent: #2997ff; /* Apple 经典蓝 */
+      --accent: #2997ff;
       --accent-hover: #0071e3;
       --text: #f5f5f7;
       --muted: #86868b;
@@ -26,213 +26,95 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Apple 专属字体栈 */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Header 毛玻璃效果 ── */
+    /* ── Header ── */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 48px;
-      position: sticky;
-      top: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 1px solid var(--border);
-      z-index: 100;
-      transition: all 0.3s var(--apple-bezier);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px; position: sticky; top: 0;
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border); z-index: 100;
     }
-    .logo {
-      font-family: 'Syne', -apple-system, sans-serif;
-      font-weight: 800;
-      font-size: 1.5rem;
-      color: var(--text);
-      letter-spacing: -0.5px;
-    }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px; }
     .logo span { color: var(--accent); }
-
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      margin-left: 32px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
+    nav a { color: var(--muted); text-decoration: none; margin-left: 32px; font-size: 0.9rem; font-weight: 500; transition: 0.3s; }
     nav a:hover, nav a.active { color: var(--text); }
 
-    /* ── 主体布局 ── */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 60px 24px 100px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 32px;
-    }
-    .section-header h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    /* ── Apple 风格按钮 ── */
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 999px; /* 胶囊按钮 */
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: all 0.3s var(--apple-bezier);
-    }
-    .btn:active { transform: scale(0.95); }
-    .btn-primary { background: var(--text); color: var(--bg); }
-    .btn-primary:hover { background: #ffffff; transform: scale(1.02); }
-    .btn-accent { background: var(--accent); color: #fff; }
-    .btn-accent:hover { background: var(--accent-hover); transform: scale(1.02); }
-    .btn-secondary { background: var(--surface-solid); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-
-    /* ── 搜索与过滤 ── */
-    .search-bar { display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
-    .search-bar input {
-      flex: 1;
-      min-width: 200px;
-      padding: 14px 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      color: var(--text);
-      font-size: 0.95rem;
-      outline: none;
-      transition: all 0.3s var(--apple-bezier);
-      backdrop-filter: blur(10px);
-    }
-    .search-bar input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.15); }
-    
-    /* ── Apple 风格卡片 (悬浮缩放) ── */
-    #jobs-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 20px;
-    }
-    .job-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: all 0.4s var(--apple-bezier);
-      cursor: pointer;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-    .job-card:hover {
-      border-color: rgba(255,255,255,0.2);
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      background: rgba(40, 40, 44, 0.8);
-    }
-    .job-card .company {
-      font-size: 0.85rem;
-      color: var(--muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-    .job-card .job-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: -0.3px;
-    }
-    .job-card .meta {
-      display: flex;
-      gap: 16px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag {
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-    }
-    .job-card .actions { margin-top: 20px; display: flex; gap: 10px; }
-    .btn-xs { padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; }
-
-    /* ── 手动录入弹窗 (Modal) ── */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.4s var(--apple-bezier);
-      z-index: 999;
-    }
-    .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-content {
-      background: var(--surface-solid);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      width: 90%;
-      max-width: 500px;
-      padding: 32px;
-      transform: scale(0.9) translateY(20px);
-      transition: all 0.4s var(--apple-bezier);
-      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
-    }
-    .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    .modal-header h3 { font-size: 1.4rem; font-weight: 600; }
-    .close-btn { background: transparent; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
-    .close-btn:hover { color: var(--text); }
-    
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; }
-    .form-group input {
-      width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-      border-radius: 12px; color: var(--text); font-size: 0.95rem; outline: none; transition: 0.3s;
-    }
-    .form-group input:focus { border-color: var(--accent); }
-
-    /* ── 通用设置 ── */
+    /* ── 布局与通用 ── */
+    main { max-width: 1200px; margin: 0 auto; padding: 60px 24px 100px; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .section-header h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
     .section { display: none; animation: fadeIn 0.5s var(--apple-bezier); }
     .section.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    #toast {
-      position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px);
-      background: var(--text); color: var(--bg); padding: 12px 24px;
-      border-radius: 999px; font-size: 0.95rem; font-weight: 600;
-      opacity: 0; pointer-events: none; transition: all 0.4s var(--apple-bezier); z-index: 1000;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+
+    /* ── 按钮与表单 ── */
+    .btn { padding: 10px 20px; border: none; border-radius: 999px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s var(--apple-bezier); }
+    .btn:active { transform: scale(0.95); }
+    .btn-primary { background: var(--text); color: var(--bg); }
+    .btn-primary:hover { background: #fff; transform: scale(1.02); }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-secondary { background: var(--surface-solid); color: var(--text); border: 1px solid var(--border); }
+    .btn-xs { padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; }
+
+    input, textarea {
+      padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text); font-size: 0.95rem; outline: none; transition: 0.3s;
     }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.15); }
+    
+    .search-bar { display: flex; gap: 12px; margin-bottom: 40px; }
+    .search-bar input { flex: 1; backdrop-filter: blur(10px); }
+
+    /* ── 岗位卡片 ── */
+    #jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .job-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px; transition: all 0.4s var(--apple-bezier); backdrop-filter: blur(20px);
+    }
+    .job-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); background: rgba(40, 40, 44, 0.8); }
+    .job-card .company { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+    .job-card .job-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+    .job-card .meta { display: flex; gap: 16px; font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+    .tag { padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; background: rgba(255,255,255,0.08); }
+
+    /* ── 看板样式 ── */
+    .board-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .board-column { background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; min-height: 300px; }
+    .board-column h3 { font-size: 1rem; margin-bottom: 16px; display: flex; justify-content: space-between; }
+    .app-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .app-card .title { font-weight: 600; margin-bottom: 6px; font-size: 0.95rem; }
+    .app-card .meta { color: var(--muted); font-size: 0.8rem; margin-bottom: 12px; }
+    .pill { padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; }
+    .pill-applied { background: rgba(41,151,255,0.2); color: var(--accent); }
+    .pill-interview { background: rgba(255,159,10,0.2); color: var(--warn); }
+    .pill-offer { background: rgba(50,215,75,0.2); color: var(--success); }
+    .pill-reject { background: rgba(255,59,48,0.2); color: var(--danger); }
+
+    /* ── 论坛样式 ── */
+    .forum-layout { display: grid; gap: 24px; grid-template-columns: 1fr 2fr; }
+    .panel { background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .post-item { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .post-item .title { font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; }
+    .post-item .meta { color: var(--muted); font-size: 0.85rem; }
+
+    /* ── 弹窗 ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 999; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--surface-solid); border: 1px solid var(--border); border-radius: 24px; width: 90%; max-width: 450px; padding: 32px; transform: scale(0.9); transition: 0.4s; }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; }
+    .form-group input { width: 100%; }
+
+    #toast { position: fixed; top: 80px; left: 50%; transform: translate(-50%, -20px); background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 999px; font-size: 0.95rem; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    #toast.show { opacity: 1; transform: translate(-50%, 0); }
   </style>
 </head>
 <body>
@@ -240,9 +122,9 @@
 <header>
   <div class="logo">Play<span>Job</span></div>
   <nav>
-    <a href="#" class="active" onclick="showSection('jobs', this); return false;">发现岗位</a>
-    <a href="#" onclick="showSection('board', this); return false;">我的看板</a>
-    <a href="#" onclick="showSection('forum', this); return false;">面经论坛</a>
+    <a href="#" class="active" onclick="showSection('jobs', this)">发现岗位</a>
+    <a href="#" onclick="showSection('board', this)">我的看板</a>
+    <a href="#" onclick="showSection('forum', this)">面经论坛</a>
   </nav>
 </header>
 
@@ -253,58 +135,57 @@
       <h2>探索实习机会</h2>
       <button class="btn btn-accent" onclick="openModal()">＋ 录入新岗位</button>
     </div>
-
     <div class="search-bar">
-      <input id="search-company" type="text" placeholder="搜索公司 (如: 腾讯, 大疆)..." />
-      <input id="search-title"   type="text" placeholder="搜索职位 (如: 产品经理)..." />
-      <button class="btn btn-primary" onclick="fetchJobs(1)">搜索</button>
+      <input id="search-company" type="text" placeholder="搜索公司 (如: 腾讯, 蔚来)..." />
+      <input id="search-title" type="text" placeholder="搜索职位 (如: 前端)..." />
+      <button class="btn btn-primary" onclick="fetchJobs()">搜索</button>
       <button class="btn btn-secondary" onclick="clearSearch()">重置</button>
     </div>
-
     <div id="jobs-container"></div>
   </section>
 
-  <!-- 看板页 (简略结构) -->
+  <!-- 看板页 -->
   <section id="section-board" class="section">
     <div class="section-header">
-      <h2>投递看板</h2>
+      <h2>投递进度看板</h2>
+      <button class="btn btn-secondary" onclick="fetchBoard()">刷新看板</button>
     </div>
-    <div style="color:var(--muted); text-align:center; margin-top:50px;">看板功能模块加载中...</div>
+    <div class="board-grid" id="board-container"></div>
   </section>
 
-  <!-- 论坛页 (简略结构) -->
+  <!-- 论坛页 -->
   <section id="section-forum" class="section">
     <div class="section-header">
-      <h2>面经论坛</h2>
+      <h2>面经交流社区</h2>
+      <button class="btn btn-secondary" onclick="fetchPosts()">刷新帖子</button>
     </div>
-    <div style="color:var(--muted); text-align:center; margin-top:50px;">论坛功能模块加载中...</div>
+    <div class="forum-layout">
+      <div class="panel">
+        <h3 style="margin-bottom:16px;">发布新帖</h3>
+        <input id="post-title" placeholder="标题（如：字节一面面经）" style="width:100%; margin-bottom:12px;" />
+        <textarea id="post-content" placeholder="分享你的面试经验..." style="width:100%; height:120px; margin-bottom:12px; resize:vertical;"></textarea>
+        <button class="btn btn-primary" style="width:100%;" onclick="createPost()">发布</button>
+      </div>
+      <div class="panel">
+        <h3 style="margin-bottom:16px;">最新讨论</h3>
+        <div id="posts-container"></div>
+      </div>
+    </div>
   </section>
 </main>
 
 <!-- 手动录入弹窗 -->
 <div class="modal-overlay" id="addJobModal">
   <div class="modal-content">
-    <div class="modal-header">
-      <h3>分享岗位信息</h3>
-      <button class="close-btn" onclick="closeModal()">×</button>
+    <div style="display:flex; justify-content:space-between; margin-bottom:24px;">
+      <h3 style="font-size:1.4rem;">分享岗位信息</h3>
+      <button onclick="closeModal()" style="background:none; border:none; color:var(--muted); font-size:1.5rem; cursor:pointer;">×</button>
     </div>
-    <div class="form-group">
-      <label>公司名称 *</label>
-      <input id="manual-company" type="text" placeholder="例如：蔚来汽车" />
-    </div>
-    <div class="form-group">
-      <label>职位名称 *</label>
-      <input id="manual-title" type="text" placeholder="例如：电池结构研发工程师" />
-    </div>
-    <div class="form-group">
-      <label>工作地点</label>
-      <input id="manual-location" type="text" placeholder="例如：上海 / 远程" />
-    </div>
-    <div class="form-group">
-      <label>投递链接 (选填)</label>
-      <input id="manual-url" type="text" placeholder="https://..." />
-    </div>
-    <button class="btn btn-accent" style="width: 100%; margin-top: 10px;" onclick="submitManualJob()">发布至广场</button>
+    <div class="form-group"><label>公司名称 *</label><input id="manual-company" type="text" /></div>
+    <div class="form-group"><label>职位名称 *</label><input id="manual-title" type="text" /></div>
+    <div class="form-group"><label>工作地点</label><input id="manual-location" type="text" /></div>
+    <div class="form-group"><label>投递链接 (选填)</label><input id="manual-url" type="text" /></div>
+    <button class="btn btn-accent" style="width:100%; margin-top:10px;" onclick="submitManualJob()">发布至广场</button>
   </div>
 </div>
 
@@ -313,7 +194,6 @@
 <script>
 const API_BASE = 'https://intern-api-16ja.onrender.com/api';
 
-// ── Apple 风格 Toast ──
 function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -321,23 +201,38 @@ function showToast(msg) {
   setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-// ── API 封装 ──
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+
 async function apiFetch(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
     headers: { 'Content-Type': 'application/json', ...options.headers },
     ...options,
   });
-  if (!res.ok) throw new Error(`请求失败: ${res.status}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
 
-// ── 获取并渲染岗位 ──
+/* ── 导航切换 ── */
+function showSection(name, el) {
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(`section-${name}`).classList.add('active');
+
+  if (name === 'jobs') fetchJobs();
+  if (name === 'board') fetchBoard();
+  if (name === 'forum') fetchPosts();
+}
+
+/* ── 1. 发现岗位 (整合自动抓取与手动录入) ── */
 async function fetchJobs() {
   const container = document.getElementById('jobs-container');
-  container.innerHTML = '<div style="color:#86868b;">正在同步云端数据...</div>';
-  
   const company = document.getElementById('search-company').value.trim();
   const title = document.getElementById('search-title').value.trim();
+  
   const params = new URLSearchParams({ page: 1, limit: 100 });
   if (company) params.set('company', company);
   if (title) params.set('title', title);
@@ -347,80 +242,29 @@ async function fetchJobs() {
     const jobs = data.data || [];
     
     if (!jobs.length) {
-      container.innerHTML = '<div style="color:#86868b;">暂无数据，试着点击右上角录入一个吧！</div>';
+      container.innerHTML = '<div style="color:var(--muted); grid-column:1/-1;">暂无数据，请确认爬虫是否抓取成功，或者手动录入一个试试。</div>';
       return;
     }
 
     container.innerHTML = jobs.map(job => `
-      <div class="job-card" onclick="window.open('${job.sourceUrl || '#'}', '_blank')">
-        <div class="company">${job.company}</div>
-        <div class="job-title">${job.title}</div>
+      <div class="job-card">
+        <div class="company">${escapeHtml(job.company)}</div>
+        <div class="job-title">${escapeHtml(job.title)}</div>
         <div class="meta">
-          <span>📍 ${job.location || '未知'}</span>
-          <span>✨ 网友分享/自动抓取</span>
+          <span>📍 ${escapeHtml(job.location)}</span>
         </div>
-        <div class="tag-list">
-          ${(job.tags || ['最新岗位']).map(t => `<span class="tag">${t}</span>`).join('')}
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+          ${(job.tags || ['最新']).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
         </div>
-        <div class="actions">
-          <button class="btn btn-secondary btn-xs" onclick="event.stopPropagation(); showToast('功能开发中：加入看板')">加入我的看板</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary btn-xs" onclick="applyJob('${job._id}')">＋ 加入看板</button>
+          ${job.sourceUrl ? `<button class="btn btn-secondary btn-xs" onclick="window.open('${job.sourceUrl}', '_blank')">查看详情</button>` : ''}
         </div>
       </div>
     `).join('');
   } catch (err) {
-    container.innerHTML = `<div style="color:#ff3b30;">网络开小差了，请确认后端已唤醒。</div>`;
+    container.innerHTML = `<div style="color:var(--danger); grid-column:1/-1;">加载失败：请确认 Render 后端服务已启动。</div>`;
   }
-}
-
-// ── 弹窗逻辑 ──
-function openModal() { document.getElementById('addJobModal').classList.add('active'); }
-function closeModal() { document.getElementById('addJobModal').classList.remove('active'); }
-
-// ── 提交手动录入的岗位 ──
-async function submitManualJob() {
-  const company = document.getElementById('manual-company').value.trim();
-  const title = document.getElementById('manual-title').value.trim();
-  const location = document.getElementById('manual-location').value.trim() || '未知';
-  const url = document.getElementById('manual-url').value.trim();
-
-  if (!company || !title) {
-    showToast('⚠️ 公司和职位名称是必填的哦！');
-    return;
-  }
-
-  try {
-    // 调用后端接口将手动录入的数据存入数据库
-    await apiFetch('/jobs', {
-      method: 'POST',
-      body: JSON.stringify({
-        company: company,
-        title: title,
-        location: location,
-        sourceUrl: url,
-        tags: ['人工录入', '最新分享']
-      })
-    });
-    
-    showToast('✅ 发布成功！已同步至云端');
-    closeModal();
-    // 清空表单
-    document.getElementById('manual-company').value = '';
-    document.getElementById('manual-title').value = '';
-    document.getElementById('manual-location').value = '';
-    document.getElementById('manual-url').value = '';
-    // 重新拉取数据
-    fetchJobs();
-  } catch (err) {
-    showToast('❌ 发布失败，请确认后端支持 POST /jobs 接口');
-  }
-}
-
-// ── 导航切换 ──
-function showSection(name, el) {
-  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById(`section-${name}`).classList.add('active');
 }
 
 function clearSearch() {
@@ -429,7 +273,124 @@ function clearSearch() {
   fetchJobs();
 }
 
-// 页面加载即拉取数据
+// 弹窗逻辑
+function openModal() { document.getElementById('addJobModal').classList.add('active'); }
+function closeModal() { document.getElementById('addJobModal').classList.remove('active'); }
+
+async function submitManualJob() {
+  const company = document.getElementById('manual-company').value.trim();
+  const title = document.getElementById('manual-title').value.trim();
+  if (!company || !title) return showToast('⚠️ 公司和职位必填');
+
+  try {
+    await apiFetch('/jobs', {
+      method: 'POST',
+      body: JSON.stringify({
+        company, title, 
+        location: document.getElementById('manual-location').value.trim() || '未知',
+        sourceUrl: document.getElementById('manual-url').value.trim(),
+        tags: ['社区分享']
+      })
+    });
+    showToast('✅ 发布成功！');
+    closeModal();
+    fetchJobs(); // 刷新列表
+  } catch (err) {
+    showToast('❌ 发布失败，可能是后端暂不支持此接口');
+  }
+}
+
+/* ── 2. 我的看板 (加入看板、转状态) ── */
+async function applyJob(jobId) {
+  try {
+    await apiFetch('/applications', { method: 'POST', body: JSON.stringify({ job: jobId, applicantName: '我' }) });
+    showToast('✅ 已加入看板！');
+  } catch (err) {
+    showToast(`❌ 加入失败：${err.message}`);
+  }
+}
+
+const APP_STATUS = ['applied', 'interview', 'offer', 'reject'];
+const STATUS_NAME = { applied: '已投递', interview: '面试中', offer: '已 Offer', reject: '已淘汰' };
+
+async function fetchBoard() {
+  const container = document.getElementById('board-container');
+  try {
+    const data = await apiFetch('/applications');
+    const board = data.board || {};
+    
+    container.innerHTML = APP_STATUS.map(status => {
+      const list = board[status] || [];
+      const cards = list.map(item => {
+        const job = item.job || {};
+        return `
+          <div class="app-card">
+            <div class="title">${escapeHtml(job.title || '未知岗位')}</div>
+            <div class="meta">${escapeHtml(job.company || '未知公司')} · ${escapeHtml(job.location)}</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;">
+              ${APP_STATUS.filter(s => s !== status).map(s => 
+                `<button class="btn-secondary btn-xs" style="padding:4px 8px; font-size:0.75rem;" onclick="updateApp('${item._id}', '${s}')">转为${STATUS_NAME[s]}</button>`
+              ).join('')}
+              <button class="btn-secondary btn-xs" style="padding:4px 8px; font-size:0.75rem; color:var(--danger);" onclick="deleteApp('${item._id}')">删除</button>
+            </div>
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="board-column">
+          <h3>${STATUS_NAME[status]} <span class="pill pill-${status}">${list.length}</span></h3>
+          ${cards || '<div style="color:var(--muted); font-size:0.85rem;">暂无记录</div>'}
+        </div>`;
+    }).join('');
+  } catch (err) {
+    container.innerHTML = '<div style="color:var(--danger);">看板加载失败</div>';
+  }
+}
+
+async function updateApp(id, status) {
+  try { await apiFetch(`/applications/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }); fetchBoard(); } catch(err) { showToast('❌ 操作失败'); }
+}
+async function deleteApp(id) {
+  try { await apiFetch(`/applications/${id}`, { method: 'DELETE' }); fetchBoard(); showToast('🗑️ 已删除'); } catch(err) { showToast('❌ 删除失败'); }
+}
+
+/* ── 3. 面经论坛 ── */
+async function fetchPosts() {
+  const container = document.getElementById('posts-container');
+  try {
+    const data = await apiFetch(`/posts?page=1&limit=20`);
+    const posts = data.data || [];
+    if (!posts.length) { container.innerHTML = '<div style="color:var(--muted);">暂无面经，来发布第一条吧！</div>'; return; }
+
+    container.innerHTML = posts.map(post => `
+      <div class="post-item">
+        <div class="title">${escapeHtml(post.title)}</div>
+        <div class="meta" style="margin-bottom:8px;">匿名用户 · 👀 ${post.views || 0}阅读 · 👍 ${post.likes || 0}点赞</div>
+        <div style="color:var(--text); font-size:0.9rem; line-height:1.5; margin-bottom:12px;">${escapeHtml(post.content).substring(0, 80)}...</div>
+        <button class="btn-secondary btn-xs" onclick="likePost('${post._id}')">👍 赞一个</button>
+      </div>
+    `).join('');
+  } catch (err) { container.innerHTML = '<div style="color:var(--danger);">帖子加载失败</div>'; }
+}
+
+async function createPost() {
+  const title = document.getElementById('post-title').value.trim();
+  const content = document.getElementById('post-content').value.trim();
+  if (!title || !content) return showToast('⚠️ 标题和内容必填');
+  try {
+    await apiFetch('/posts', { method: 'POST', body: JSON.stringify({ author:'匿名', title, content, tags:['面经'] }) });
+    showToast('✅ 发帖成功！');
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-content').value = '';
+    fetchPosts();
+  } catch (err) { showToast('❌ 发帖失败'); }
+}
+
+async function likePost(id) {
+  try { await apiFetch(`/posts/${id}/like`, { method: 'PUT' }); fetchPosts(); } catch(err) {}
+}
+
+// 初始化
 fetchJobs();
 </script>
 </body>
