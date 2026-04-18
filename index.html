@@ -32,95 +32,115 @@
       color: var(--text);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     /* ── Header ── */
     header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 16px 48px; position: sticky; top: 0;
-      background: rgba(0, 0, 0, 0.7); backdrop-filter: saturate(180%) blur(20px);
+      background: rgba(0, 0, 0, 0.8); backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border); z-index: 100;
     }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px; }
+    .logo { 
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px; 
+      cursor: pointer; transition: 0.3s;
+    }
+    .logo:hover { text-shadow: 0 0 15px rgba(41, 151, 255, 0.5); }
     .logo span { color: var(--accent); }
     nav a { color: var(--muted); text-decoration: none; margin-left: 32px; font-size: 0.9rem; font-weight: 500; transition: 0.3s; }
     nav a:hover, nav a.active { color: var(--text); }
 
     /* ── 布局与通用 ── */
-    main { max-width: 1200px; margin: 0 auto; padding: 60px 24px 100px; }
+    main { max-width: 1200px; margin: 0 auto; padding: 40px 24px 100px; }
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
-    .section-header h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
-    .section { display: none; animation: fadeIn 0.5s var(--apple-bezier); }
-    .section.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .section-header h2 { font-size: 2.2rem; font-weight: 700; letter-spacing: -1px; }
+    .section { display: none; }
+    .section.active { display: block; animation: fadeIn 0.6s var(--apple-bezier); }
+    
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(20px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
 
     /* ── 按钮与表单 ── */
-    .btn { padding: 10px 20px; border: none; border-radius: 999px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s var(--apple-bezier); }
-    .btn:active { transform: scale(0.95); }
+    .btn { padding: 12px 24px; border: none; border-radius: 999px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s var(--apple-bezier); }
+    .btn:active { transform: scale(0.96); }
     .btn-primary { background: var(--text); color: var(--bg); }
-    .btn-primary:hover { background: #fff; transform: scale(1.02); }
+    .btn-primary:hover { background: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,255,255,0.2); }
     .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(41,151,255,0.3); }
     .btn-secondary { background: var(--surface-solid); color: var(--text); border: 1px solid var(--border); }
-    .btn-xs { padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    .btn-xs { padding: 8px 16px; font-size: 0.8rem; border-radius: 10px; }
 
     input, textarea {
-      padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-      border-radius: 12px; color: var(--text); font-size: 0.95rem; outline: none; transition: 0.3s;
+      padding: 14px 18px; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 14px; color: var(--text); font-size: 1rem; outline: none; transition: 0.3s var(--apple-bezier);
     }
-    input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.15); }
+    input:focus, textarea:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.1); }
     
-    .search-bar { display: flex; gap: 12px; margin-bottom: 40px; }
+    .search-bar { display: flex; gap: 12px; margin-bottom: 50px; }
     .search-bar input { flex: 1; backdrop-filter: blur(10px); }
 
-    /* ── 岗位卡片 ── */
-    #jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    /* ── 岗位卡片入场动画 ── */
+    #jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
     .job-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 24px; transition: all 0.4s var(--apple-bezier); backdrop-filter: blur(20px);
+      padding: 28px; transition: all 0.5s var(--apple-bezier); backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; flex-direction: column; height: 100%;
+      animation: cardSlideUp 0.6s var(--apple-bezier) backwards;
     }
-    .job-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); background: rgba(40, 40, 44, 0.8); }
-    .job-card .company { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
-    .job-card .job-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
-    .job-card .meta { display: flex; gap: 16px; font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
-    .tag { padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; background: rgba(255,255,255,0.08); }
+    @keyframes cardSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .job-card:hover { 
+      border-color: rgba(255,255,255,0.3); transform: translateY(-8px) scale(1.01); 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+      background: rgba(45, 45, 48, 0.8); 
+    }
+    .job-card .company { font-size: 0.8rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .job-card .job-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; line-height: 1.3; }
+    .job-card .meta { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--muted); margin-bottom: auto; padding-bottom: 20px; }
+    .job-card .meta span:last-child { background: rgba(41, 151, 255, 0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; }
+    .tag { padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; background: rgba(255,255,255,0.06); color: var(--muted); font-weight: 500; }
 
-    /* ── 看板样式 ── */
-    .board-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    .board-column { background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; min-height: 300px; }
-    .board-column h3 { font-size: 1rem; margin-bottom: 16px; display: flex; justify-content: space-between; }
-    .app-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
-    .app-card .title { font-weight: 600; margin-bottom: 6px; font-size: 0.95rem; }
-    .app-card .meta { color: var(--muted); font-size: 0.8rem; margin-bottom: 12px; }
-    .pill { padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; }
-    .pill-applied { background: rgba(41,151,255,0.2); color: var(--accent); }
-    .pill-interview { background: rgba(255,159,10,0.2); color: var(--warn); }
-    .pill-offer { background: rgba(50,215,75,0.2); color: var(--success); }
-    .pill-reject { background: rgba(255,59,48,0.2); color: var(--danger); }
+    /* ── 看板与论坛 ── */
+    .board-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .board-column { background: var(--surface-solid); border: 1px solid var(--border); border-radius: 24px; padding: 20px; min-height: 400px; }
+    .app-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 15px; transition: 0.3s; }
+    .app-card:hover { background: rgba(255,255,255,0.06); }
+    
+    .panel { background: var(--surface-solid); border: 1px solid var(--border); border-radius: 24px; padding: 30px; }
+    .post-item { background: rgba(255,255,255,0.03); border-radius: 18px; padding: 20px; margin-bottom: 16px; border: 1px solid transparent; transition: 0.3s; }
+    .post-item:hover { border-color: var(--border); transform: translateX(5px); }
 
-    /* ── 论坛样式 ── */
-    .forum-layout { display: grid; gap: 24px; grid-template-columns: 1fr 2fr; }
-    .panel { background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-    .post-item { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-    .post-item .title { font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; }
-    .post-item .meta { color: var(--muted); font-size: 0.85rem; }
-
-    /* ── 弹窗 ── */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 999; }
+    /* ── 弹窗增强 ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s var(--apple-bezier); z-index: 999; }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-content { background: var(--surface-solid); border: 1px solid var(--border); border-radius: 24px; width: 90%; max-width: 450px; padding: 32px; transform: scale(0.9); transition: 0.4s; }
+    .modal-content { background: #1c1c1e; border: 1px solid var(--border); border-radius: 32px; width: 90%; max-width: 480px; padding: 40px; transform: scale(0.8); transition: 0.5s var(--apple-bezier); }
     .modal-overlay.active .modal-content { transform: scale(1); }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; }
-    .form-group input { width: 100%; }
 
-    #toast { position: fixed; top: 80px; left: 50%; transform: translate(-50%, -20px); background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 999px; font-size: 0.95rem; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-    #toast.show { opacity: 1; transform: translate(-50%, 0); }
+    /* ── 状态反馈 ── */
+    #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: #ffffff; color: #000000; padding: 14px 28px; border-radius: 999px; font-size: 0.95rem; font-weight: 600; transition: 0.5s var(--apple-bezier); z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* 响应式优化 */
+    @media (max-width: 768px) {
+      header { padding: 16px 24px; }
+      nav a { margin-left: 16px; font-size: 0.8rem; }
+      .search-bar { flex-direction: column; }
+      .section-header h2 { font-size: 1.8rem; }
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Play<span>Job</span></div>
+  <div class="logo" onclick="showSection('jobs')">Play<span>Job</span></div>
   <nav>
     <a href="#" class="active" onclick="showSection('jobs', this)">发现岗位</a>
     <a href="#" onclick="showSection('board', this)">我的看板</a>
@@ -136,9 +156,9 @@
       <button class="btn btn-accent" onclick="openModal()">＋ 录入新岗位</button>
     </div>
     <div class="search-bar">
-      <input id="search-company" type="text" placeholder="搜索公司 (如: 腾讯, 蔚来)..." />
-      <input id="search-title" type="text" placeholder="搜索职位 (如: 前端)..." />
-      <button class="btn btn-primary" onclick="fetchJobs()">搜索</button>
+      <input id="search-company" type="text" placeholder="搜公司: 字节, 腾讯..." />
+      <input id="search-title" type="text" placeholder="搜职位: 前端, 后端, AI..." />
+      <button class="btn btn-primary" onclick="fetchJobs()">即刻搜索</button>
       <button class="btn btn-secondary" onclick="clearSearch()">重置</button>
     </div>
     <div id="jobs-container"></div>
@@ -148,7 +168,7 @@
   <section id="section-board" class="section">
     <div class="section-header">
       <h2>投递进度看板</h2>
-      <button class="btn btn-secondary" onclick="fetchBoard()">刷新看板</button>
+      <button class="btn btn-secondary" onclick="fetchBoard()">刷新状态</button>
     </div>
     <div class="board-grid" id="board-container"></div>
   </section>
@@ -157,17 +177,19 @@
   <section id="section-forum" class="section">
     <div class="section-header">
       <h2>面经交流社区</h2>
-      <button class="btn btn-secondary" onclick="fetchPosts()">刷新帖子</button>
     </div>
     <div class="forum-layout">
       <div class="panel">
-        <h3 style="margin-bottom:16px;">发布新帖</h3>
-        <input id="post-title" placeholder="标题（如：字节一面面经）" style="width:100%; margin-bottom:12px;" />
-        <textarea id="post-content" placeholder="分享你的面试经验..." style="width:100%; height:120px; margin-bottom:12px; resize:vertical;"></textarea>
-        <button class="btn btn-primary" style="width:100%;" onclick="createPost()">发布</button>
+        <h3 style="margin-bottom:20px; font-weight: 700;">发布面经</h3>
+        <input id="post-title" placeholder="标题: 某厂三轮面经分享" style="width:100%; margin-bottom:15px;" />
+        <textarea id="post-content" placeholder="在这里写下你的面试细节..." style="width:100%; height:180px; margin-bottom:20px; resize:none;"></textarea>
+        <button class="btn btn-primary" style="width:100%;" onclick="createPost()">立即发布</button>
       </div>
       <div class="panel">
-        <h3 style="margin-bottom:16px;">最新讨论</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+          <h3 style="font-weight: 700;">最新讨论</h3>
+          <button class="btn btn-secondary btn-xs" onclick="fetchPosts()">刷新</button>
+        </div>
         <div id="posts-container"></div>
       </div>
     </div>
@@ -177,15 +199,15 @@
 <!-- 手动录入弹窗 -->
 <div class="modal-overlay" id="addJobModal">
   <div class="modal-content">
-    <div style="display:flex; justify-content:space-between; margin-bottom:24px;">
-      <h3 style="font-size:1.4rem;">分享岗位信息</h3>
-      <button onclick="closeModal()" style="background:none; border:none; color:var(--muted); font-size:1.5rem; cursor:pointer;">×</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+      <h3 style="font-size:1.6rem; font-weight: 800; letter-spacing: -1px;">分享岗位</h3>
+      <button onclick="closeModal()" style="background:none; border:none; color:var(--muted); font-size:2rem; cursor:pointer;">&times;</button>
     </div>
-    <div class="form-group"><label>公司名称 *</label><input id="manual-company" type="text" /></div>
-    <div class="form-group"><label>职位名称 *</label><input id="manual-title" type="text" /></div>
-    <div class="form-group"><label>工作地点</label><input id="manual-location" type="text" /></div>
-    <div class="form-group"><label>投递链接 (选填)</label><input id="manual-url" type="text" /></div>
-    <button class="btn btn-accent" style="width:100%; margin-top:10px;" onclick="submitManualJob()">发布至广场</button>
+    <div class="form-group"><label>公司名称 *</label><input id="manual-company" type="text" placeholder="如：小米" /></div>
+    <div class="form-group"><label>职位名称 *</label><input id="manual-title" type="text" placeholder="如：系统研发实习生" /></div>
+    <div class="form-group"><label>工作地点</label><input id="manual-location" type="text" placeholder="北京 / 远程" /></div>
+    <div class="form-group"><label>投递链接 (选填)</label><input id="manual-url" type="text" placeholder="https://..." /></div>
+    <button class="btn btn-accent" style="width:100%; margin-top:20px; padding: 16px;" onclick="submitManualJob()">发布至广场</button>
   </div>
 </div>
 
@@ -215,10 +237,14 @@ async function apiFetch(path, options = {}) {
   return res.json();
 }
 
-/* ── 导航切换 ── */
 function showSection(name, el) {
   document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-  if(el) el.classList.add('active');
+  if(el) {
+    el.classList.add('active');
+  } else {
+    document.querySelector(`nav a[onclick*="${name}"]`).classList.add('active');
+  }
+  
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(`section-${name}`).classList.add('active');
 
@@ -227,112 +253,123 @@ function showSection(name, el) {
   if (name === 'forum') fetchPosts();
 }
 
-/* ── 1. 发现岗位 (整合自动抓取与手动录入) ── */
+/* ── 1. 发现岗位 ── */
 async function fetchJobs() {
   const container = document.getElementById('jobs-container');
   const company = document.getElementById('search-company').value.trim();
   const title = document.getElementById('search-title').value.trim();
-  
   const query = `${company} ${title}`.trim();
 
-  // 情况 A：如果用户输入了关键词，开启“全网现场搜索”模式
   if (query) {
     container.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-        <div style="color: var(--accent); font-size: 1.2rem; margin-bottom: 10px;">🚀 正在全网现场搜寻最新职位...</div>
-        <div style="color: var(--muted); font-size: 0.9rem;">正在嵌套搜索引擎结果，请稍候</div>
+      <div style="grid-column: 1/-1; text-align: center; padding: 80px 0;">
+        <div style="font-size: 2rem; margin-bottom: 20px;">🚀</div>
+        <div style="color: var(--accent); font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">正在深空搜索最新职位...</div>
+        <div style="color: var(--muted);">正在为您聚合全网最实时的实习信息</div>
       </div>
     `;
 
     try {
-      // 请求我们刚才在后端写的 live-search 接口
       const data = await apiFetch(`/live-search?q=${encodeURIComponent(query)}`);
-      const jobs = data.data || [];
-      
-      if (!jobs.length) {
-        container.innerHTML = '<div style="color:var(--muted); grid-column:1/-1;">未找到相关实时结果，请换个关键词试试。</div>';
-        return;
-      }
-
-      renderJobCards(jobs, true); // true 表示这是实时搜索结果
+      renderJobCards(data.data || [], true);
     } catch (err) {
-      console.error(err);
-      container.innerHTML = '<div style="color:var(--danger); grid-column:1/-1;">实时搜索服务暂时不可用，请稍后再试。</div>';
+      container.innerHTML = '<div style="color:var(--danger); grid-column:1/-1; text-align:center;">搜索暂时不可用，请稍后刷新。</div>';
     }
-  } 
-  // 情况 B：如果输入框为空，则显示数据库里的缓存数据
-  else {
-    container.innerHTML = '<div style="color:var(--muted);">正在加载云端精选岗位...</div>';
+  } else {
+    container.innerHTML = '<div style="color:var(--muted); grid-column:1/-1; text-align:center; padding: 50px;">正在加载精选岗位...</div>';
     try {
       const data = await apiFetch(`/jobs?page=1&limit=50`);
       renderJobCards(data.data || [], false);
     } catch (err) {
-      container.innerHTML = '<div style="color:var(--danger);">无法连接到云端数据库。</div>';
+      container.innerHTML = '<div style="color:var(--danger); grid-column:1/-1; text-align:center;">无法连接到数据库，请检查后端状态。</div>';
     }
   }
 }
 
-// ─── 渲染卡片的通用函数 ───
 function renderJobCards(jobs, isLive) {
   const container = document.getElementById('jobs-container');
-  container.innerHTML = jobs.map(job => `
-    <div class="job-card" onclick="window.open('${job.sourceUrl}', '_blank')">
+  if (jobs.length === 0) {
+    container.innerHTML = '<div style="color:var(--muted); grid-column:1/-1; text-align:center; padding: 50px;">未发现匹配岗位，换个关键词试试？</div>';
+    return;
+  }
+  
+  container.innerHTML = jobs.map((job, index) => `
+    <div class="job-card" style="animation-delay: ${index * 0.05}s" onclick="window.open('${job.sourceUrl || '#'}', '_blank')">
       <div class="company">${escapeHtml(job.company)}</div>
       <div class="job-title">${escapeHtml(job.title)}</div>
       <div class="meta">
-        <span>📍 ${escapeHtml(job.location)}</span>
+        <span>📍 ${escapeHtml(job.location || '未知')}</span>
         <span>${isLive ? '🌐 实时检索' : '✨ 云端精选'}</span>
       </div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-        ${(job.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;">
+        ${(job.tags || ['最新']).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
       </div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-accent btn-xs">直达投递官网</button>
+      <div style="display:flex; gap:12px; margin-top:auto;">
+        <button class="btn btn-primary btn-xs" style="flex:1">直达申请</button>
         <button class="btn btn-secondary btn-xs" onclick="event.stopPropagation(); applyJob('${job._id || 'manual'}')">加入看板</button>
       </div>
     </div>
   `).join('');
 }
 
-// 弹窗逻辑
+function clearSearch() {
+  document.getElementById('search-company').value = '';
+  document.getElementById('search-title').value = '';
+  fetchJobs();
+}
+
 function openModal() { document.getElementById('addJobModal').classList.add('active'); }
 function closeModal() { document.getElementById('addJobModal').classList.remove('active'); }
 
 async function submitManualJob() {
   const company = document.getElementById('manual-company').value.trim();
   const title = document.getElementById('manual-title').value.trim();
-  if (!company || !title) return showToast('⚠️ 公司和职位必填');
+  if (!company || !title) return showToast('⚠️ 请填写必填项');
 
   try {
     await apiFetch('/jobs', {
       method: 'POST',
       body: JSON.stringify({
         company, title, 
-        location: document.getElementById('manual-location').value.trim() || '未知',
+        location: document.getElementById('manual-location').value.trim() || '不限',
         sourceUrl: document.getElementById('manual-url').value.trim(),
-        tags: ['社区分享']
+        tags: ['社区录入']
       })
     });
-    showToast('✅ 发布成功！');
+    showToast('✅ 岗位已成功录入');
     closeModal();
-    fetchJobs(); // 刷新列表
+    fetchJobs();
   } catch (err) {
-    showToast('❌ 发布失败，可能是后端暂不支持此接口');
+    showToast('❌ 录入失败');
   }
 }
 
-/* ── 2. 我的看板 (加入看板、转状态) ── */
+/* ── 2. 我的看板 ── */
 async function applyJob(jobId) {
+  // 这里的逻辑需要确保把当前卡片的岗位信息发给后端
+  // 建议直接获取卡片数据并发送
+  const jobCard = event.target.closest('.job-card');
+  const jobData = {
+    company: jobCard.querySelector('.company').innerText,
+    title: jobCard.querySelector('.job-title').innerText,
+    location: jobCard.querySelector('.meta span').innerText.replace('📍 ', ''),
+    sourceUrl: jobCard.getAttribute('onclick').match(/'([^']+)'/)[1], // 提取 URL
+    applicantName: '我'
+  };
+
   try {
-    await apiFetch('/applications', { method: 'POST', body: JSON.stringify({ job: jobId, applicantName: '我' }) });
-    showToast('✅ 已加入看板！');
+    await apiFetch('/applications', { 
+      method: 'POST', 
+      body: JSON.stringify(jobData) 
+    });
+    showToast('✅ 已成功加入看板！');
   } catch (err) {
     showToast(`❌ 加入失败：${err.message}`);
   }
 }
 
 const APP_STATUS = ['applied', 'interview', 'offer', 'reject'];
-const STATUS_NAME = { applied: '已投递', interview: '面试中', offer: '已 Offer', reject: '已淘汰' };
+const STATUS_NAME = { applied: '已投递', interview: '面试中', offer: '已录取', reject: '淘汰' };
 
 async function fetchBoard() {
   const container = document.getElementById('board-container');
@@ -347,24 +384,24 @@ async function fetchBoard() {
         return `
           <div class="app-card">
             <div class="title">${escapeHtml(job.title || '未知岗位')}</div>
-            <div class="meta">${escapeHtml(job.company || '未知公司')} · ${escapeHtml(job.location)}</div>
-            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;">
+            <div class="meta" style="margin-bottom:12px;">${escapeHtml(job.company || '未知公司')}</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
               ${APP_STATUS.filter(s => s !== status).map(s => 
-                `<button class="btn-secondary btn-xs" style="padding:4px 8px; font-size:0.75rem;" onclick="updateApp('${item._id}', '${s}')">转为${STATUS_NAME[s]}</button>`
+                `<button class="btn-secondary btn-xs" onclick="updateApp('${item._id}', '${s}')">${STATUS_NAME[s]}</button>`
               ).join('')}
-              <button class="btn-secondary btn-xs" style="padding:4px 8px; font-size:0.75rem; color:var(--danger);" onclick="deleteApp('${item._id}')">删除</button>
+              <button class="btn-secondary btn-xs" style="color:var(--danger); grid-column: span 2; margin-top:4px;" onclick="deleteApp('${item._id}')">移除</button>
             </div>
           </div>`;
       }).join('');
 
       return `
         <div class="board-column">
-          <h3>${STATUS_NAME[status]} <span class="pill pill-${status}">${list.length}</span></h3>
-          ${cards || '<div style="color:var(--muted); font-size:0.85rem;">暂无记录</div>'}
+          <h3 style="font-weight:700;">${STATUS_NAME[status]} <span class="pill pill-${status}">${list.length}</span></h3>
+          <div style="margin-top:20px;">${cards || '<div style="color:var(--muted); text-align:center; padding:20px; font-size:0.8rem;">空</div>'}</div>
         </div>`;
     }).join('');
   } catch (err) {
-    container.innerHTML = '<div style="color:var(--danger);">看板加载失败</div>';
+    container.innerHTML = '看板加载失败';
   }
 }
 
@@ -372,7 +409,8 @@ async function updateApp(id, status) {
   try { await apiFetch(`/applications/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }); fetchBoard(); } catch(err) { showToast('❌ 操作失败'); }
 }
 async function deleteApp(id) {
-  try { await apiFetch(`/applications/${id}`, { method: 'DELETE' }); fetchBoard(); showToast('🗑️ 已删除'); } catch(err) { showToast('❌ 删除失败'); }
+  if(!confirm('确定要删除这条记录吗？')) return;
+  try { await apiFetch(`/applications/${id}`, { method: 'DELETE' }); fetchBoard(); showToast('🗑️ 记录已删除'); } catch(err) { showToast('❌ 删除失败'); }
 }
 
 /* ── 3. 面经论坛 ── */
@@ -381,37 +419,39 @@ async function fetchPosts() {
   try {
     const data = await apiFetch(`/posts?page=1&limit=20`);
     const posts = data.data || [];
-    if (!posts.length) { container.innerHTML = '<div style="color:var(--muted);">暂无面经，来发布第一条吧！</div>'; return; }
+    if (!posts.length) { container.innerHTML = '<div style="color:var(--muted); text-align:center; padding:40px;">暂无讨论</div>'; return; }
 
     container.innerHTML = posts.map(post => `
       <div class="post-item">
         <div class="title">${escapeHtml(post.title)}</div>
-        <div class="meta" style="margin-bottom:8px;">匿名用户 · 👀 ${post.views || 0}阅读 · 👍 ${post.likes || 0}点赞</div>
-        <div style="color:var(--text); font-size:0.9rem; line-height:1.5; margin-bottom:12px;">${escapeHtml(post.content).substring(0, 80)}...</div>
-        <button class="btn-secondary btn-xs" onclick="likePost('${post._id}')">👍 赞一个</button>
+        <div style="color:var(--text); font-size:0.9rem; line-height:1.6; margin:10px 0; opacity:0.8;">${escapeHtml(post.content).substring(0, 100)}...</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+          <div style="font-size:0.8rem; color:var(--muted);">👀 ${post.views || 0} · 👍 ${post.likes || 0}</div>
+          <button class="btn btn-secondary btn-xs" onclick="likePost('${post._id}')">👍 赞</button>
+        </div>
       </div>
     `).join('');
-  } catch (err) { container.innerHTML = '<div style="color:var(--danger);">帖子加载失败</div>'; }
+  } catch (err) { container.innerHTML = '加载失败'; }
 }
 
 async function createPost() {
   const title = document.getElementById('post-title').value.trim();
   const content = document.getElementById('post-content').value.trim();
-  if (!title || !content) return showToast('⚠️ 标题和内容必填');
+  if (!title || !content) return showToast('⚠️ 标题和内容不能为空');
   try {
-    await apiFetch('/posts', { method: 'POST', body: JSON.stringify({ author:'匿名', title, content, tags:['面经'] }) });
-    showToast('✅ 发帖成功！');
+    await apiFetch('/posts', { method: 'POST', body: JSON.stringify({ author:'匿名用户', title, content, tags:['面经'] }) });
+    showToast('✅ 帖子已发布');
     document.getElementById('post-title').value = '';
     document.getElementById('post-content').value = '';
     fetchPosts();
-  } catch (err) { showToast('❌ 发帖失败'); }
+  } catch (err) { showToast('❌ 发布失败'); }
 }
 
 async function likePost(id) {
   try { await apiFetch(`/posts/${id}/like`, { method: 'PUT' }); fetchPosts(); } catch(err) {}
 }
 
-// 初始化
+// 启动
 fetchJobs();
 </script>
 </body>

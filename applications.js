@@ -1,91 +1,72 @@
-// routes/applications.js
-const express     = require('express');
-const router      = express.Router();
-const Application = require('./Application');
+const express = require('express');
+const router = express.Router();
+const Application = require('./models/Application'); // 确保路径正确
 
-/**
- * GET /api/applications
- * 返回看板数据，按状态分组
- * ?status=applied|interview|offer|reject  （可选过滤）
- */
-router.get('/', async (req, res, next) => {
+// 获取看板所有投递记录
+router.get('/', async (req, res) => {
   try {
-    const filter = {};
-    if (req.query.status) filter.status = req.query.status;
-
-    const applications = await Application.find(filter)
-      .populate('job', 'company title location deadline tags sourceUrl')  // 关联 Job 字段
-      .sort({ appliedAt: -1 });
-
-    // 按状态分组，便于看板直接渲染
+    const apps = await Application.find().sort({ updatedAt: -1 });
+    // 按状态分组返回
     const board = {
-      applied:   [],
-      interview: [],
-      offer:     [],
-      reject:    [],
+      applied: apps.filter(a => a.status === 'applied'),
+      interview: apps.filter(a => a.status === 'interview'),
+      offer: apps.filter(a => a.status === 'offer'),
+      reject: apps.filter(a => a.status === 'reject'),
     };
-    applications.forEach(app => board[app.status].push(app));
-
-    res.json({ total: applications.length, board });
+    res.json({ board });
   } catch (err) {
-    next(err);
+    res.status(500).json({ error: err.message });
   }
 });
 
-/**
- * POST /api/applications  新增一条投递记录
- * Body: { job: "<jobId>", applicantName?, notes?, nextAction?, nextDate? }
- */
-router.post('/', async (req, res, next) => {
+// 加入看板（新增投递）
+router.post('/', async (req, res) => {
   try {
-    const { job, applicantName, notes, nextAction, nextDate } = req.body;
-    if (!job) return res.status(400).json({ error: 'job 字段必填' });
+    // 前端会传 jobObj，我们将其解构出来存入数据库
+    const { company, title, location, sourceUrl, applicantName } = req.body;
+    
+    if (!company || !title) {
+      return res.status(400).json({ error: "公司名称和职位是必填项" });
+    }
 
-    const application = await Application.create({
-      job, applicantName, notes, nextAction, nextDate,
-    });
-    const populated = await application.populate('job', 'company title location sourceUrl');
-    res.status(201).json(populated);
-  } catch (err) {
-    next(err);
-  }
-});
-
-/**
- * PUT /api/applications/:id  更新状态或备注
- * Body: { status?, notes?, nextAction?, nextDate? }
- */
-router.put('/:id', async (req, res, next) => {
-  try {
-    const allowedUpdates = ['status', 'notes', 'nextAction', 'nextDate'];
-    const updates = {};
-    allowedUpdates.forEach(key => {
-      if (req.body[key] !== undefined) updates[key] = req.body[key];
+    const newApp = new Application({
+      company,
+      title,
+      location,
+      sourceUrl,
+      applicantName: applicantName || '我',
+      status: 'applied'
     });
 
-    const application = await Application.findByIdAndUpdate(
-      req.params.id,
-      updates,
-      { new: true, runValidators: true }
-    ).populate('job', 'company title location sourceUrl');
-
-    if (!application) return res.status(404).json({ error: '投递记录不存在' });
-    res.json(application);
+    const savedApp = await newApp.save();
+    res.status(201).json(savedApp);
   } catch (err) {
-    next(err);
+    console.error("❌ 保存看板失败:", err);
+    res.status(500).json({ error: "无法存入数据库: " + err.message });
   }
 });
 
-/**
- * DELETE /api/applications/:id  删除一条投递记录
- */
-router.delete('/:id', async (req, res, next) => {
+// 更新状态
+router.put('/:id', async (req, res) => {
   try {
-    const application = await Application.findByIdAndDelete(req.params.id);
-    if (!application) return res.status(404).json({ error: '投递记录不存在' });
-    res.json({ message: '删除成功' });
+    const updated = await Application.findByIdAndUpdate(
+      req.params.id, 
+      { status: req.body.status }, 
+      { new: true }
+    );
+    res.json(updated);
   } catch (err) {
-    next(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 删除记录
+router.delete('/:id', async (req, res) => {
+  try {
+    await Application.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
