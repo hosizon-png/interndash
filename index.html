@@ -233,44 +233,65 @@ async function fetchJobs() {
   const company = document.getElementById('search-company').value.trim();
   const title = document.getElementById('search-title').value.trim();
   
-  const params = new URLSearchParams({ page: 1, limit: 100 });
-  if (company) params.set('company', company);
-  if (title) params.set('title', title);
+  const query = `${company} ${title}`.trim();
 
-  try {
-    const data = await apiFetch(`/jobs?${params}`);
-    const jobs = data.data || [];
-    
-    if (!jobs.length) {
-      container.innerHTML = '<div style="color:var(--muted); grid-column:1/-1;">暂无数据，请确认爬虫是否抓取成功，或者手动录入一个试试。</div>';
-      return;
-    }
-
-    container.innerHTML = jobs.map(job => `
-      <div class="job-card">
-        <div class="company">${escapeHtml(job.company)}</div>
-        <div class="job-title">${escapeHtml(job.title)}</div>
-        <div class="meta">
-          <span>📍 ${escapeHtml(job.location)}</span>
-        </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-          ${(job.tags || ['最新']).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
-        </div>
-        <div style="display:flex; gap:10px;">
-          <button class="btn btn-secondary btn-xs" onclick="applyJob('${job._id}')">＋ 加入看板</button>
-          ${job.sourceUrl ? `<button class="btn btn-secondary btn-xs" onclick="window.open('${job.sourceUrl}', '_blank')">查看详情</button>` : ''}
-        </div>
+  // 情况 A：如果用户输入了关键词，开启“全网现场搜索”模式
+  if (query) {
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+        <div style="color: var(--accent); font-size: 1.2rem; margin-bottom: 10px;">🚀 正在全网现场搜寻最新职位...</div>
+        <div style="color: var(--muted); font-size: 0.9rem;">正在嵌套搜索引擎结果，请稍候</div>
       </div>
-    `).join('');
-  } catch (err) {
-    container.innerHTML = `<div style="color:var(--danger); grid-column:1/-1;">加载失败：请确认 Render 后端服务已启动。</div>`;
+    `;
+
+    try {
+      // 请求我们刚才在后端写的 live-search 接口
+      const data = await apiFetch(`/live-search?q=${encodeURIComponent(query)}`);
+      const jobs = data.data || [];
+      
+      if (!jobs.length) {
+        container.innerHTML = '<div style="color:var(--muted); grid-column:1/-1;">未找到相关实时结果，请换个关键词试试。</div>';
+        return;
+      }
+
+      renderJobCards(jobs, true); // true 表示这是实时搜索结果
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = '<div style="color:var(--danger); grid-column:1/-1;">实时搜索服务暂时不可用，请稍后再试。</div>';
+    }
+  } 
+  // 情况 B：如果输入框为空，则显示数据库里的缓存数据
+  else {
+    container.innerHTML = '<div style="color:var(--muted);">正在加载云端精选岗位...</div>';
+    try {
+      const data = await apiFetch(`/jobs?page=1&limit=50`);
+      renderJobCards(data.data || [], false);
+    } catch (err) {
+      container.innerHTML = '<div style="color:var(--danger);">无法连接到云端数据库。</div>';
+    }
   }
 }
 
-function clearSearch() {
-  document.getElementById('search-company').value = '';
-  document.getElementById('search-title').value = '';
-  fetchJobs();
+// ─── 渲染卡片的通用函数 ───
+function renderJobCards(jobs, isLive) {
+  const container = document.getElementById('jobs-container');
+  container.innerHTML = jobs.map(job => `
+    <div class="job-card" onclick="window.open('${job.sourceUrl}', '_blank')">
+      <div class="company">${escapeHtml(job.company)}</div>
+      <div class="job-title">${escapeHtml(job.title)}</div>
+      <div class="meta">
+        <span>📍 ${escapeHtml(job.location)}</span>
+        <span>${isLive ? '🌐 实时检索' : '✨ 云端精选'}</span>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+        ${(job.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-accent btn-xs">直达投递官网</button>
+        <button class="btn btn-secondary btn-xs" onclick="event.stopPropagation(); applyJob('${job._id || 'manual'}')">加入看板</button>
+      </div>
+    </div>
+  `).join('');
 }
 
 // 弹窗逻辑
