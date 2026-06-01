@@ -23,3 +23,11 @@ An open-source, production-ready RESTful API backend service designed to power m
    ```bash
    git clone [https://github.com/hosizon-png/interndash-api.git](https://github.com/hosizon-png/interndash-api.git)
    cd interndash-api
+	1.	Install dependencies:
+npm install
+
+	2.	Start the development server:
+npm run dev
+
+📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
